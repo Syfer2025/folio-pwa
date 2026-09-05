@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Folio">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E2E4A"/><stop offset="1" stop-color="#080F1C"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#g)"/>
+  <path d="M241 158 100 180v168l141-26z" fill="#C9A227"/>
+  <path d="M271 158l141 22v168l-141-26z" fill="#F0D08A"/>
+  <path d="M241 158h30v164h-30z" fill="#0A1220"/>
+</svg>

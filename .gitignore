@@ -1,0 +1,12 @@
+# Sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Node, caso entre um servidor local
+node_modules/

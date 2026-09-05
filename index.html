@@ -1,0 +1,1956 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Folio — leitura por assinatura. Acervo em domínio público e edições licenciadas, com leitor tipográfico completo.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Folio">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Literata:opsz,wght@7..72,400;7..72,600&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&display=swap">
+<title>Folio</title>
+<style>
+/* ============================================================
+   FOLIO — Sistema de design
+   Cores: iOS System Colors (valores oficiais Apple)
+   Tipografia: iOS Text Styles (tamanho / entrelinha / tracking oficiais)
+   Padrao dark-first (referencia: app Apple TV), com modo claro completo.
+   ============================================================ */
+
+/* ---------- 1. TOKENS: modo escuro (padrao) ---------- */
+:root{
+  /* System Colors — Dark */
+  --sys-red:#FF453A;      --sys-orange:#FF9F0A;  --sys-yellow:#FFD60A;
+  --sys-green:#30D158;    --sys-mint:#63E6E2;    --sys-teal:#40C8E0;
+  --sys-cyan:#64D2FF;     --sys-blue:#0A84FF;    --sys-indigo:#5E5CE6;
+  --sys-purple:#BF5AF2;   --sys-pink:#FF375F;    --sys-brown:#AC8E68;
+
+  /* System Grays — Dark */
+  --gray:#8E8E93;  --gray2:#636366; --gray3:#48484A;
+  --gray4:#3A3A3C; --gray5:#2C2C2E; --gray6:#1C1C1E;
+
+  /* Labels — Dark */
+  --label:#FFFFFF;
+  --label-2:rgba(235,235,245,.60);
+  --label-3:rgba(235,235,245,.30);
+  --label-4:rgba(235,235,245,.16);
+
+  /* Backgrounds — Dark */
+  --bg:#000000;  --bg-2:#1C1C1E; --bg-3:#2C2C2E;
+  --grouped:#000000; --grouped-2:#1C1C1E; --grouped-3:#2C2C2E;
+
+  /* Fills — Dark */
+  --fill:rgba(120,120,128,.36);
+  --fill-2:rgba(120,120,128,.32);
+  --fill-3:rgba(118,118,128,.24);
+  --fill-4:rgba(116,116,128,.18);
+
+  /* Separators — Dark */
+  --sep:rgba(84,84,88,.65);
+  --sep-opaque:#38383A;
+
+  /* Materials — Dark (blur + tint, equivalente a UIBlurEffect) */
+  --mat-chrome:rgba(22,22,24,.72);
+  --mat-thick:rgba(37,37,39,.90);
+  --mat-regular:rgba(44,44,46,.78);
+  --mat-thin:rgba(58,58,60,.55);
+  --mat-blur:saturate(180%) blur(20px);
+  --hairline:rgba(255,255,255,.10);
+  --tile-stroke:rgba(255,255,255,.09);
+  --scrim:rgba(0,0,0,.48);
+
+  --tint:var(--sys-blue);
+  --shadow-card:0 12px 34px rgba(0,0,0,.55);
+  --shadow-pop:0 18px 60px rgba(0,0,0,.70);
+  --stage:#0A0A0C;
+  color-scheme:dark;
+}
+
+/* ---------- 2. TOKENS: modo claro ---------- */
+/* Sistema em claro (nao vale se o usuario forcou escuro) */
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --sys-red:#FF3B30;     --sys-orange:#FF9500; --sys-yellow:#FFCC00;
+    --sys-green:#34C759;   --sys-mint:#00C7BE;   --sys-teal:#30B0C7;
+    --sys-cyan:#32ADE6;    --sys-blue:#007AFF;   --sys-indigo:#5856D6;
+    --sys-purple:#AF52DE;  --sys-pink:#FF2D55;   --sys-brown:#A2845E;
+
+    --gray:#8E8E93;  --gray2:#AEAEB2; --gray3:#C7C7CC;
+    --gray4:#D1D1D6; --gray5:#E5E5EA; --gray6:#F2F2F7;
+
+    --label:#000000;
+    --label-2:rgba(60,60,67,.60);
+    --label-3:rgba(60,60,67,.30);
+    --label-4:rgba(60,60,67,.18);
+
+    --bg:#FFFFFF;  --bg-2:#F2F2F7; --bg-3:#FFFFFF;
+    --grouped:#F2F2F7; --grouped-2:#FFFFFF; --grouped-3:#F2F2F7;
+
+    --fill:rgba(120,120,128,.20);
+    --fill-2:rgba(120,120,128,.16);
+    --fill-3:rgba(118,118,128,.12);
+    --fill-4:rgba(116,116,128,.08);
+
+    --sep:rgba(60,60,67,.29);
+    --sep-opaque:#C6C6C8;
+
+    --mat-chrome:rgba(249,249,249,.82);
+    --mat-thick:rgba(245,245,245,.94);
+    --mat-regular:rgba(252,252,252,.82);
+    --mat-thin:rgba(255,255,255,.70);
+    --hairline:rgba(0,0,0,.10);
+    --tile-stroke:rgba(0,0,0,.10);
+    --scrim:rgba(255,255,255,.42);
+
+    --shadow-card:0 10px 30px rgba(0,0,0,.14);
+    --shadow-pop:0 18px 50px rgba(0,0,0,.20);
+    --stage:#E9E9EE;
+    color-scheme:light;
+  }
+}
+/* Escolha explicita do usuario em claro */
+:root[data-theme="light"]{
+  --sys-red:#FF3B30;     --sys-orange:#FF9500; --sys-yellow:#FFCC00;
+  --sys-green:#34C759;   --sys-mint:#00C7BE;   --sys-teal:#30B0C7;
+  --sys-cyan:#32ADE6;    --sys-blue:#007AFF;   --sys-indigo:#5856D6;
+  --sys-purple:#AF52DE;  --sys-pink:#FF2D55;   --sys-brown:#A2845E;
+
+  --gray:#8E8E93;  --gray2:#AEAEB2; --gray3:#C7C7CC;
+  --gray4:#D1D1D6; --gray5:#E5E5EA; --gray6:#F2F2F7;
+
+  --label:#000000;
+  --label-2:rgba(60,60,67,.60);
+  --label-3:rgba(60,60,67,.30);
+  --label-4:rgba(60,60,67,.18);
+
+  --bg:#FFFFFF;  --bg-2:#F2F2F7; --bg-3:#FFFFFF;
+  --grouped:#F2F2F7; --grouped-2:#FFFFFF; --grouped-3:#F2F2F7;
+
+  --fill:rgba(120,120,128,.20);
+  --fill-2:rgba(120,120,128,.16);
+  --fill-3:rgba(118,118,128,.12);
+  --fill-4:rgba(116,116,128,.08);
+
+  --sep:rgba(60,60,67,.29);
+  --sep-opaque:#C6C6C8;
+
+  --mat-chrome:rgba(249,249,249,.82);
+  --mat-thick:rgba(245,245,245,.94);
+  --mat-regular:rgba(252,252,252,.82);
+  --mat-thin:rgba(255,255,255,.70);
+  --hairline:rgba(0,0,0,.10);
+  --tile-stroke:rgba(0,0,0,.10);
+  --scrim:rgba(255,255,255,.42);
+
+  --shadow-card:0 10px 30px rgba(0,0,0,.14);
+  --shadow-pop:0 18px 50px rgba(0,0,0,.20);
+  --stage:#E9E9EE;
+  color-scheme:light;
+}
+
+/* ---------- 3. Aumentar contraste (HIG: Increase Contrast) ---------- */
+@media (prefers-contrast: more){
+  :root{
+    --label-2:rgba(235,235,245,.82);
+    --label-3:rgba(235,235,245,.55);
+    --sep:rgba(255,255,255,.45);
+    --tile-stroke:rgba(255,255,255,.28);
+  }
+  :root[data-theme="light"], :root:not([data-theme="dark"]){
+    --label-2:rgba(60,60,67,.86);
+    --label-3:rgba(60,60,67,.58);
+  }
+}
+
+/* ---------- 4. Tipografia: iOS Text Styles ----------
+   Dynamic Type: 1rem = tamanho base do navegador x --dt (controle no app).
+   Tamanhos em rem (17/16 = 1.0625) e tracking em em, para escalarem juntos. */
+html{ font-size:calc(100% * var(--dt,1)); -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+
+:root{
+  --ui:"Inter","SF Pro Text","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Literata","New York","Iowan Old Style",Charter,Palatino,Georgia,"Times New Roman",serif;
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+
+  /* size / line-height / tracking / weight */
+  --f-large-title:700 2.125rem/1.2059 var(--ui);      --tr-large-title:.0109em;  /* 34/41 +0.37 */
+  --f-title1:700 1.75rem/1.2143 var(--ui);            --tr-title1:.0129em;       /* 28/34 +0.36 */
+  --f-title2:700 1.375rem/1.2727 var(--ui);           --tr-title2:.0159em;       /* 22/28 +0.35 */
+  --f-title3:600 1.25rem/1.25 var(--ui);              --tr-title3:.019em;        /* 20/25 +0.38 */
+  --f-headline:600 1.0625rem/1.2941 var(--ui);        --tr-headline:-.0253em;    /* 17/22 -0.43 */
+  --f-body:400 1.0625rem/1.2941 var(--ui);            --tr-body:-.0253em;
+  --f-callout:400 1rem/1.3125 var(--ui);              --tr-callout:-.0194em;     /* 16/21 -0.31 */
+  --f-subhead:400 .9375rem/1.3333 var(--ui);          --tr-subhead:-.0153em;     /* 15/20 -0.23 */
+  --f-footnote:400 .8125rem/1.3846 var(--ui);         --tr-footnote:-.0062em;    /* 13/18 -0.08 */
+  --f-caption1:400 .75rem/1.3333 var(--ui);           --tr-caption1:0em;         /* 12/16  0    */
+  --f-caption2:400 .6875rem/1.1818 var(--ui);         --tr-caption2:.0055em;     /* 11/13 +0.06 */
+  --f-tab:500 .625rem/1.2 var(--ui);                  --tr-tab:.005em;           /* 10pt medium */
+
+  /* Metricas de layout iOS */
+  --margin:19px;          /* margem lateral padrao */
+  --hit:44px;             /* alvo minimo de toque (44x44pt) */
+  --navbar-h:44px;
+  --tabbar-h:64px;
+  --radius-card:16px;
+  --radius-cover:22px;      /* capas: mais arredondadas que os demais cartoes */
+  --radius-sheet:14px;
+  --radius-btn:980px;
+}
+
+/* ---------- 5. Base ---------- */
+*,*::before,*::after{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--stage); color:var(--label);
+  font:var(--f-body); letter-spacing:var(--tr-body);
+  font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  overscroll-behavior:none;
+  display:flex; align-items:center; justify-content:center;
+}
+img{max-width:100%;} [hidden]{display:none!important;}
+button{font:inherit; letter-spacing:inherit; color:inherit; background:none; border:0; margin:0; padding:0; cursor:pointer; -webkit-tap-highlight-color:transparent;}
+input,select{font:inherit; letter-spacing:inherit; color:inherit;}
+h1,h2,h3,h4,p,figure{margin:0;}
+ul,ol{margin:0; padding:0; list-style:none;}
+:focus{outline:none;}
+:focus-visible{ outline:3px solid var(--tint); outline-offset:2px; border-radius:6px; }
+
+/* Cantos continuos (squircle) quando o navegador suportar — Apple usa curva continua */
+@supports (corner-shape: superellipse(4)){
+  .sq{ corner-shape:superellipse(4); }
+}
+
+/* Reduzir movimento (HIG / prefers-reduced-motion) */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms!important; animation-iteration-count:1!important; transition-duration:.001ms!important; scroll-behavior:auto!important; }
+}
+
+/* ---------- 6. Palco + moldura do dispositivo ---------- */
+.stage{
+  width:100%; height:100dvh; display:flex; align-items:center; justify-content:center;
+  padding:0; gap:24px;
+}
+.device{
+  position:relative; width:100%; height:100dvh; max-width:none;
+  background:var(--bg); overflow:hidden; isolation:isolate;
+  --safe-top:env(safe-area-inset-top, 0px);
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
+  --dw:100vw;
+  --gap:13px;
+  --tile:calc((var(--dw) - 2 * var(--margin) - 2 * var(--gap) - 30px) / 3);
+}
+/* Em telas largas o app fica numa coluna de largura de celular. Nao e uma
+   moldura de aparelho: e so o viewport. As safe areas continuam vindo do
+   env() real, que vale 0 aqui e o valor do recorte no iPhone. */
+@media (min-width:760px){
+  .stage{ padding:24px; }
+  .device{
+    width:430px; height:min(932px, calc(100dvh - 48px));
+    border-radius:26px; box-shadow:var(--shadow-pop), 0 0 0 .5px var(--hairline);
+    --dw:430px;
+  }
+}
+
+/* ---------- 8. Estrutura de tela ---------- */
+.screens{ position:absolute; inset:0; }
+.screen{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  background:var(--bg); visibility:hidden; opacity:0;
+}
+.screen.is-active{ visibility:visible; opacity:1; }
+
+.scroller{
+  flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain; scrollbar-width:none;
+}
+.scroller::-webkit-scrollbar{ display:none; }
+.scroller-pad{ padding-bottom:calc(var(--tabbar-h) + var(--safe-bottom) + 22px); }
+
+/* Empilhamento estilo iOS (push/pop) */
+.stack-layer{
+  position:absolute; inset:0; z-index:60; background:var(--bg);
+  display:flex; flex-direction:column;
+  transform:translate3d(100%,0,0); visibility:hidden;
+  transition:transform .38s cubic-bezier(.32,.72,0,1), visibility .38s;
+  box-shadow:-1px 0 0 var(--sep), var(--shadow-pop);
+}
+.stack-layer.is-open{ transform:translate3d(0,0,0); visibility:visible; }
+
+/* ---------- 9. Barra de navegacao ---------- */
+.navbar{
+  position:absolute; top:0; left:0; right:0; z-index:50;
+  padding-top:var(--safe-top);
+  background:transparent; transition:background .25s linear, box-shadow .25s linear, backdrop-filter .25s linear;
+}
+.navbar.is-solid{
+  background:var(--mat-chrome);
+  -webkit-backdrop-filter:var(--mat-blur); backdrop-filter:var(--mat-blur);
+  box-shadow:0 .5px 0 var(--sep);
+}
+.navbar-row{
+  height:var(--navbar-h); display:flex; align-items:center; gap:8px;
+  padding:0 var(--margin);
+}
+.navbar-title{
+  flex:1; text-align:center; font:var(--f-headline); letter-spacing:var(--tr-headline);
+  opacity:0; transition:opacity .2s linear; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.navbar.is-solid .navbar-title{ opacity:1; }
+.nav-btn{
+  min-width:var(--hit); min-height:var(--hit); display:inline-flex; align-items:center; justify-content:center;
+  color:var(--tint); border-radius:22px;
+}
+.nav-btn.plain{ color:var(--label); }
+.nav-btn:active{ opacity:.4; }
+.nav-back{ gap:2px; padding-right:8px; font:var(--f-body); letter-spacing:var(--tr-body); }
+
+.nav-wordmark{ flex:1; text-align:center; font:800 1.375rem/1 var(--ui); letter-spacing:-.05em; color:var(--label); }
+.large-title{
+  padding:4px var(--margin) 8px; font:var(--f-large-title); letter-spacing:var(--tr-large-title);
+  text-wrap:balance;
+}
+.large-title-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding-right:var(--margin); }
+.large-title-row .large-title{ padding-right:0; }
+
+.avatar{
+  width:31px; height:31px; border-radius:50%; flex:none;
+  background:var(--fill); color:var(--label); display:grid; place-items:center;
+  font:600 .8125rem/1 var(--ui); letter-spacing:.01em;
+}
+.avatar-btn{ min-width:var(--hit); min-height:var(--hit); display:grid; place-items:center; }
+
+/* ---------- 10. Barra de abas ---------- */
+.tabbar{
+  position:absolute; left:0; right:0; bottom:0; z-index:70;
+  padding-bottom:var(--safe-bottom);
+  background:var(--mat-chrome);
+  -webkit-backdrop-filter:var(--mat-blur); backdrop-filter:var(--mat-blur);
+  box-shadow:0 -.5px 0 var(--sep);
+}
+.tabbar-row{ height:var(--tabbar-h); display:flex; align-items:stretch; }
+.tab{
+  flex:1; min-height:var(--hit); display:flex; flex-direction:column; align-items:center; gap:4px;
+  color:var(--gray); padding:6px 2px 0; position:relative;
+}
+.tab[aria-selected="true"]{ color:var(--label); }
+.tab .tab-pill{
+  width:58px; max-width:100%; height:34px; border-radius:17px; display:grid; place-items:center;
+  transition:background .2s ease-out;
+}
+.tab[aria-selected="true"] .tab-pill{ background:var(--fill); }
+.tab .tab-label{ font:500 .75rem/1.2 var(--ui); letter-spacing:-.012em; white-space:nowrap; }
+.tab .wordmark{ font:800 .875rem/1 var(--ui); letter-spacing:-.045em; }
+.tab:active .tab-pill{ background:var(--fill-2); }
+
+
+/* ---------- 11. Botoes ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  min-height:var(--hit); padding:0 18px; border-radius:var(--radius-btn);
+  font:var(--f-headline); letter-spacing:var(--tr-headline); white-space:nowrap;
+  transition:opacity .12s linear, transform .12s ease-out;
+}
+.btn:active{ opacity:.72; transform:scale(.97); }
+.btn-prominent{ background:var(--label); color:var(--bg); }
+.btn-tinted{ background:var(--fill-3); color:var(--tint); }
+.btn-gray{ background:var(--fill-3); color:var(--label); }
+.btn-plain{ color:var(--tint); padding:0 6px; }
+.btn-sm{ min-height:34px; padding:0 14px; font:var(--f-subhead); letter-spacing:var(--tr-subhead); font-weight:600; }
+.btn-icon{
+  width:var(--hit); height:var(--hit); padding:0; border-radius:50%;
+  background:var(--fill-3); color:var(--label); display:grid; place-items:center;
+}
+.btn-block{ width:100%; }
+
+/* ---------- 12. Prateleiras (shelves) ---------- */
+.shelf{ margin-top:34px; }
+.shelf-head{ padding:0 var(--margin) 12px; }
+.shelf-title{ display:inline-flex; align-items:center; gap:3px; min-height:38px; color:var(--label); text-align:left; }
+.shelf-title h2{ font:700 1.625rem/1.1 var(--ui); letter-spacing:-.024em; }
+.shelf-title svg{ flex:none; margin-top:3px; }
+.shelf-title:active{ opacity:.55; }
+.shelf-sub{ font:var(--f-subhead); letter-spacing:var(--tr-subhead); color:var(--label-2); margin-top:-4px; }
+.rail{
+  display:flex; gap:var(--gap); overflow-x:auto; overflow-y:hidden;
+  padding:2px var(--margin) 2px; scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain; scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{ display:none; }
+.rail > *{ scroll-snap-align:start; flex:none; }
+
+/* ---------- 13. Capa de livro ---------- */
+.cover{
+  position:relative; aspect-ratio:2/3; border-radius:var(--radius-cover); overflow:hidden;
+  background:var(--gray5); box-shadow:0 0 0 .5px var(--tile-stroke) inset, var(--shadow-card);
+  display:block; isolation:isolate;
+}
+.cover-art{ position:absolute; inset:0; display:flex; flex-direction:column; padding:11% 10%; }
+.cover{ container-type:inline-size; }
+.c-title{
+  font-weight:800; line-height:.97; letter-spacing:-.028em; text-wrap:balance;
+  text-shadow:0 2px 16px rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.5);
+}
+.c-title.serif{ font-family:var(--display); font-weight:700; letter-spacing:-.015em; }
+.c-title.wide{ font-weight:600; letter-spacing:.13em; line-height:1.14; }
+.c-author{
+  font-family:var(--ui); font-weight:600; letter-spacing:.15em; text-transform:uppercase;
+  font-size:clamp(5px,4.3cqw,10px); opacity:.9; text-shadow:0 1px 8px rgba(0,0,0,.7);
+}
+.c-scrim{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.16) 40%,rgba(0,0,0,0) 68%);
+}
+.plus-badge{
+  position:absolute; top:5.5%; right:6%; z-index:4; color:#fff;
+  font:800 clamp(5px,4.4cqw,9px)/1 var(--ui); letter-spacing:-.045em;
+  text-shadow:0 1px 7px rgba(0,0,0,.85);
+}
+.cover-prog{ position:absolute; left:7%; right:7%; bottom:6%; z-index:4; height:3px; border-radius:2px; background:rgba(255,255,255,.32); overflow:hidden; }
+.cover-prog i{ display:block; height:100%; background:#fff; }
+.cover-grain, .bb-grain{
+  position:absolute; inset:0; pointer-events:none; mix-blend-mode:overlay; opacity:.28;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+}
+.poster-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--gap); padding:0 var(--margin); }
+.poster-grid .book-card, .poster-grid .book-card .cover{ width:100%; }
+
+/* Cartao de livro no trilho */
+.book-card{ width:var(--tile); text-align:left; }
+.book-card .cover{ width:100%; }
+.book-card:active .cover{ transform:scale(.97); }
+.book-card .cover{ transition:transform .16s ease-out; }
+
+/* Continuar lendo — cartao largo com progresso */
+.resume-card{ width:280px; text-align:left; }
+.resume-inner{ display:flex; gap:12px; align-items:flex-start; }
+.resume-inner .cover{ width:74px; flex:none; }
+.resume-meta{ flex:1; min-width:0; padding-top:2px; }
+.resume-meta .rc-kicker{ font:var(--f-caption2); letter-spacing:.06em; text-transform:uppercase; color:var(--label-2); font-weight:600; }
+.resume-meta .rc-title{ font:var(--f-headline); letter-spacing:var(--tr-headline); margin-top:3px;
+  display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.resume-meta .rc-chapter{ font:var(--f-caption1); letter-spacing:var(--tr-caption1); color:var(--label-2); margin-top:2px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.progress{ height:3px; border-radius:2px; background:var(--fill-3); overflow:hidden; margin-top:10px; }
+.progress > i{ display:block; height:100%; border-radius:2px; background:var(--label); }
+.resume-meta .rc-left{ font:var(--f-caption2); letter-spacing:var(--tr-caption2); color:var(--label-2); margin-top:6px; display:block; font-variant-numeric:tabular-nums; }
+
+/* Trilho numerado (Top 10) */
+.rank-card{ width:150px; display:flex; align-items:flex-end; gap:0; text-align:left; }
+.rank-num{
+  font-family:var(--ui); font-weight:700; font-size:78px; line-height:.74; letter-spacing:-.07em;
+  color:transparent; -webkit-text-stroke:2px var(--label-3); margin-right:-6px; flex:none;
+  font-variant-numeric:tabular-nums; user-select:none;
+}
+.rank-card .cover{ width:96px; }
+
+/* Cartao de colecao (16:9, estilo Apple TV) */
+.collection-card{ width:280px; text-align:left; }
+.collection-art{
+  position:relative; aspect-ratio:16/9; border-radius:var(--radius-card); overflow:hidden;
+  box-shadow:0 0 0 .5px var(--tile-stroke) inset, var(--shadow-card); display:flex; flex-direction:column; justify-content:flex-end;
+  padding:14px;
+}
+.collection-art .cl-name{ font:var(--f-title3); letter-spacing:var(--tr-title3); color:#fff; text-shadow:0 1px 12px rgba(0,0,0,.5); }
+.collection-art .cl-count{ font:var(--f-caption1); letter-spacing:var(--tr-caption1); color:rgba(255,255,255,.78); margin-top:2px; }
+.collection-art > *{ position:relative; z-index:1; }
+
+/* ---------- 14. Billboard (herói) ---------- */
+.billboard{ position:relative; padding-top:calc(var(--safe-top) + var(--navbar-h) + 6px); }
+.bb-track{
+  display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none;
+  -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;
+}
+.bb-track::-webkit-scrollbar{ display:none; }
+.bb-slide{
+  flex:none; width:100%; scroll-snap-align:center; scroll-snap-stop:always;
+  display:flex; padding:0 var(--margin);
+}
+.bb-card{
+  flex:1; position:relative; isolation:isolate; overflow:hidden; border-radius:20px;
+  min-height:min(56dvh, 438px); display:flex; flex-direction:column; justify-content:flex-end;
+  padding:20px 16px 18px; box-shadow:0 0 0 .5px var(--tile-stroke) inset;
+}
+.bb-art{ position:absolute; inset:0; overflow:hidden; }
+.bb-art{ border-radius:inherit; }
+.bb-grain{ opacity:.2; }
+.bb-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.42) 34%, rgba(0,0,0,0) 64%);
+}
+.bb-scrim-top{ position:absolute; inset:0 0 auto 0; height:180px; background:linear-gradient(to bottom, color-mix(in srgb, var(--bg) 60%, transparent), rgba(0,0,0,0)); }
+.bb-body{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center; gap:9px; }
+.bb-kicker{
+  font:var(--f-caption2); letter-spacing:.14em; text-transform:uppercase; font-weight:700; color:var(--label-2);
+  display:inline-flex; align-items:center; gap:6px;
+}
+.bb-brand{ font-weight:800; letter-spacing:-.02em; text-transform:none; font-size:.8125rem; color:var(--label); }
+.bb-title{
+  font-family:var(--ui); font-weight:800; font-size:clamp(34px, 10.4vw, 46px); line-height:.98; letter-spacing:-.042em;
+  text-wrap:balance; color:var(--label);
+}
+.bb-meta{ font:var(--f-subhead); letter-spacing:var(--tr-subhead); color:var(--label-2); text-wrap:balance; max-width:34ch; }
+.bb-actions{ display:flex; align-items:center; gap:10px; margin-top:5px; }
+.bb-dots{ display:flex; align-items:center; justify-content:center; gap:2px; padding:14px 0 0; position:relative; z-index:2; }
+.bb-dot-hit{ min-width:20px; height:26px; display:grid; place-items:center; }
+.bb-dot{ width:7px; height:7px; border-radius:50%; background:var(--label-3); transition:background .2s linear, transform .2s ease-out; }
+.bb-dot-hit[aria-current="true"] .bb-dot{ background:var(--label); transform:scale(1.14); }
+
+/* ---------- 15. Ficha do livro ---------- */
+.detail-hero{ position:relative; padding:0 var(--margin) 0; }
+.detail-bgart{ position:absolute; inset:-60px -60px auto -60px; height:430px; filter:blur(48px) saturate(150%); opacity:.6; }
+
+.detail-bgscrim{ position:absolute; inset:0; background:linear-gradient(to top, var(--bg) 6%, color-mix(in srgb, var(--bg) 58%, transparent) 52%, color-mix(in srgb, var(--bg) 28%, transparent)); }
+.detail-inner{ position:relative; z-index:2; padding-top:calc(var(--safe-top) + var(--navbar-h) + 12px); display:flex; flex-direction:column; align-items:center; text-align:center; gap:11px; }
+.detail-inner .cover{ width:168px; }
+.detail-title{ font:var(--f-title1); letter-spacing:var(--tr-title1); text-wrap:balance; }
+.detail-author{ font:var(--f-callout); letter-spacing:var(--tr-callout); color:var(--label-2); margin-top:-7px; }
+.detail-facts{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 9px; font:var(--f-caption1); letter-spacing:var(--tr-caption1); color:var(--label-2); }
+.badge{
+  display:inline-flex; align-items:center; gap:4px; padding:2px 7px; border-radius:5px;
+  background:var(--fill-3); color:var(--label-2); font:var(--f-caption2); letter-spacing:.02em; font-weight:600;
+}
+.badge.is-plus{ background:var(--label); color:var(--bg); }
+.detail-actions{ display:flex; gap:10px; width:100%; max-width:340px; }
+.detail-actions .btn{ flex:1; }
+.icon-row{ display:flex; justify-content:center; gap:30px; padding:16px 0 2px; }
+.icon-action{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-width:var(--hit); min-height:var(--hit); color:var(--tint); }
+.icon-action span{ font:var(--f-caption2); letter-spacing:var(--tr-caption2); }
+.icon-action[aria-pressed="true"]{ color:var(--sys-green); }
+
+.section{ padding:22px var(--margin) 0; }
+.section h3{ font:var(--f-title3); letter-spacing:var(--tr-title3); margin-bottom:8px; }
+.prose{ font:var(--f-body); letter-spacing:var(--tr-body); color:var(--label-2); max-width:62ch; }
+.prose p + p{ margin-top:.7em; }
+.clamped{ display:-webkit-box; -webkit-line-clamp:4; line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+.more-link{ color:var(--tint); font:var(--f-body); letter-spacing:var(--tr-body); min-height:var(--hit); display:inline-flex; align-items:center; }
+
+/* Lista agrupada iOS */
+.list{ background:var(--grouped-2); border-radius:var(--radius-sheet); overflow:hidden; }
+.list-row{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  min-height:var(--hit); padding:11px 16px; position:relative;
+  font:var(--f-body); letter-spacing:var(--tr-body);
+}
+.list-row + .list-row::before{ content:""; position:absolute; left:16px; right:0; top:0; height:.5px; background:var(--sep); }
+.list-row .lr-value{ margin-left:auto; color:var(--label-2); text-align:right; }
+.list-row:active{ background:var(--fill-4); }
+.chev{ color:var(--label-3); flex:none; }
+.list-note{ font:var(--f-footnote); letter-spacing:var(--tr-footnote); color:var(--label-2); padding:8px 16px 0; max-width:62ch; }
+
+/* Sumário */
+.toc-row .toc-n{ width:24px; color:var(--label-2); font-variant-numeric:tabular-nums; font:var(--f-subhead); letter-spacing:var(--tr-subhead); flex:none; }
+.toc-row .toc-t{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.toc-row .toc-len{ color:var(--label-2); font:var(--f-caption1); letter-spacing:var(--tr-caption1); font-variant-numeric:tabular-nums; }
+.toc-row[data-read="1"] .toc-t{ color:var(--label-2); }
+
+/* ---------- 16. Busca ---------- */
+.searchfield{ display:flex; align-items:center; gap:10px; padding:2px var(--margin) 18px; }
+.sf-box{
+  flex:1; display:flex; align-items:center; gap:11px; height:51px; padding:0 15px;
+  background:var(--fill-3); border-radius:16px; color:var(--label-2);
+}
+.sf-box input{
+  flex:1; min-width:0; background:none; border:0; outline:none; color:var(--label);
+  font:var(--f-body); letter-spacing:var(--tr-body);
+}
+.sf-box input::placeholder{ color:var(--label-2); }
+.sf-cancel{ color:var(--tint); font:var(--f-body); letter-spacing:var(--tr-body); min-height:var(--hit); padding:0 2px; }
+.cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; padding:0 var(--margin); }
+.cat-card{
+  position:relative; aspect-ratio:16/10; border-radius:var(--radius-card); overflow:hidden; padding:12px;
+  display:flex; align-items:flex-end; text-align:left; box-shadow:0 0 0 .5px var(--tile-stroke) inset;
+  font:var(--f-headline); letter-spacing:var(--tr-headline); color:#fff; text-shadow:0 1px 10px rgba(0,0,0,.5);
+}
+.cat-card span{ position:relative; z-index:1; }
+.result-row{ align-items:flex-start; }
+.result-row .cover{ width:50px; flex:none; }
+.result-meta{ flex:1; min-width:0; }
+.result-meta b{ display:block; font:var(--f-callout); letter-spacing:var(--tr-callout); font-weight:600; }
+.result-meta small{ display:block; font:var(--f-subhead); letter-spacing:var(--tr-subhead); color:var(--label-2); }
+.empty{ padding:52px var(--margin); text-align:center; color:var(--label-2); }
+.empty b{ display:block; font:var(--f-title3); letter-spacing:var(--tr-title3); color:var(--label); margin-bottom:6px; }
+.empty p{ font:var(--f-subhead); letter-spacing:var(--tr-subhead); max-width:38ch; margin:0 auto; }
+
+/* ---------- 17. Biblioteca ---------- */
+.segmented{
+  display:flex; gap:2px; padding:2px; margin:0 var(--margin) 16px; background:var(--fill-4);
+  border-radius:9px;
+}
+.seg{
+  flex:1; min-height:32px; padding:0 6px; border-radius:7px; display:grid; place-items:center;
+  font:var(--f-subhead); letter-spacing:var(--tr-subhead); font-weight:500; color:var(--label);
+  transition:background .18s ease-out; white-space:nowrap;
+}
+.seg[aria-selected="true"]{ background:var(--bg-3); box-shadow:0 3px 8px rgba(0,0,0,.3), 0 0 0 .5px var(--hairline); font-weight:600; }
+.lib-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px 12px; padding:0 var(--margin); }
+.lib-grid .book-card{ width:100%; }
+.lib-grid .book-card .cover{ width:100%; }
+
+/* ---------- 18. Leitor ---------- */
+.reader{ background:var(--rd-bg); color:var(--rd-ink); }
+.reader{
+  --rd-bg:#000000; --rd-ink:rgba(235,235,245,.86); --rd-dim:rgba(235,235,245,.42);
+}
+.reader[data-rtheme="original"]{ --rd-bg:#FFFFFF; --rd-ink:#000000; --rd-dim:rgba(60,60,67,.6); }
+.reader[data-rtheme="quiet"]{ --rd-bg:#F7F2E7; --rd-ink:#2B2620; --rd-dim:rgba(43,38,32,.55); }
+.reader[data-rtheme="paper"]{ --rd-bg:#D9D2C4; --rd-ink:#25211B; --rd-dim:rgba(37,33,27,.55); }
+.reader[data-rtheme="night"]{ --rd-bg:#000000; --rd-ink:rgba(235,235,245,.86); --rd-dim:rgba(235,235,245,.42); }
+.reader .navbar.is-solid{ background:color-mix(in srgb, var(--rd-bg) 84%, transparent); box-shadow:0 .5px 0 color-mix(in srgb, var(--rd-ink) 16%, transparent); }
+.reader .nav-btn{ color:var(--rd-ink); }
+.reader .navbar-title{ color:var(--rd-dim); font:var(--f-caption1); letter-spacing:var(--tr-caption1); opacity:1; }
+
+.reader-page{ flex:1; position:relative; overflow:hidden; }
+.reader-col{
+  position:absolute; top:calc(var(--safe-top) + var(--navbar-h) + 10px); left:22px; right:22px; bottom:4px;
+  column-width:100%; column-gap:44px; column-fill:auto;
+  font-family:var(--rd-font, var(--serif)); font-size:calc(var(--rd-size,19) * 1px);
+  line-height:1.56; letter-spacing:.001em; text-align:justify; hyphens:auto;
+  transition:transform .32s cubic-bezier(.32,.72,0,1);
+}
+.reader-col h4{
+  font-family:var(--rd-font, var(--serif)); font-weight:600; font-size:1.05em; text-align:left;
+  margin:0 0 .35em; letter-spacing:.02em;
+}
+.reader-col .ch-num{
+  display:block; font-family:var(--ui); font-size:.62em; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--rd-dim); margin-bottom:.5em; text-align:left;
+}
+.reader-col p{ margin:0; text-indent:1.4em; }
+.reader-col p.first{ text-indent:0; }
+.reader-col p + p{ margin-top:0; }
+.reader-col .dlg{ text-indent:0; margin-top:.5em; }
+.reader .navbar, .reader .reader-foot{ transition:opacity .26s ease-out, transform .26s ease-out; }
+.reader.is-immersive .navbar{ opacity:0; transform:translateY(-10px); pointer-events:none; }
+.reader.is-immersive .reader-foot{ opacity:0; }
+.reader-tap{ position:absolute; inset:0; display:flex; z-index:3; }
+.reader-tap button{ flex:1; }
+.reader-tap button:nth-child(2){ flex:1.1; }
+.reader-foot{
+  padding:8px 22px calc(var(--safe-bottom) + 10px); display:flex; align-items:center; justify-content:space-between; gap:12px;
+  font:var(--f-caption2); letter-spacing:var(--tr-caption2); color:var(--rd-dim); font-variant-numeric:tabular-nums;
+  position:relative; z-index:4;
+}
+
+/* ---------- 19. Folhas modais (sheets) ---------- */
+.sheet-scrim{
+  position:absolute; inset:0; z-index:100; background:rgba(0,0,0,.4);
+  opacity:0; visibility:hidden; transition:opacity .3s ease-out, visibility .3s;
+}
+.sheet-scrim.is-open{ opacity:1; visibility:visible; }
+.sheet{
+  position:absolute; left:0; right:0; bottom:0; z-index:101;
+  background:var(--mat-thick); -webkit-backdrop-filter:var(--mat-blur); backdrop-filter:var(--mat-blur);
+  border-radius:14px 14px 0 0; box-shadow:0 -.5px 0 var(--hairline), var(--shadow-pop);
+  padding:0 var(--margin) calc(var(--safe-bottom) + 18px);
+  transform:translate3d(0,110%,0); visibility:hidden;
+  transition:transform .38s cubic-bezier(.32,.72,0,1), visibility .38s;
+  max-height:88%; overflow-y:auto; scrollbar-width:none;
+}
+.sheet::-webkit-scrollbar{ display:none; }
+.sheet.is-open{ transform:translate3d(0,0,0); visibility:visible; }
+.grabber{ width:36px; height:5px; border-radius:3px; background:var(--label-3); margin:6px auto 10px; }
+.sheet-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:12px; }
+.sheet-head h3{ font:var(--f-title3); letter-spacing:var(--tr-title3); }
+.sheet-group + .sheet-group{ margin-top:18px; }
+.sheet-group > h4{ font:var(--f-footnote); letter-spacing:.05em; text-transform:uppercase; color:var(--label-2); font-weight:600; margin-bottom:8px; padding:0 2px; }
+
+/* Controles do leitor */
+.stepper{ display:flex; align-items:stretch; background:var(--fill-3); border-radius:9px; overflow:hidden; }
+.stepper button{ flex:1; min-height:var(--hit); display:grid; place-items:center; color:var(--label); }
+.stepper button + button{ box-shadow:-.5px 0 0 var(--sep); }
+.stepper button:active{ background:var(--fill-2); }
+.stepper .s-a{ font-weight:600; }
+.theme-row{ display:flex; gap:12px; }
+.theme-swatch{
+  flex:1; aspect-ratio:1/1; border-radius:14px; display:grid; place-items:center;
+  font-family:var(--serif); font-size:20px; font-weight:600;
+  box-shadow:0 0 0 .5px var(--hairline) inset;
+}
+.theme-swatch[aria-pressed="true"]{ box-shadow:0 0 0 2.5px var(--tint); }
+.font-list{ display:flex; flex-direction:column; }
+.font-list .list-row{ padding-left:14px; padding-right:14px; }
+.check{ color:var(--tint); margin-left:auto; flex:none; }
+
+/* Switch iOS */
+.switch{
+  width:51px; height:31px; border-radius:16px; background:var(--fill); position:relative; flex:none;
+  transition:background .22s ease-out; margin-left:auto;
+}
+.switch[aria-checked="true"]{ background:var(--sys-green); }
+.switch::after{
+  content:""; position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%;
+  background:#fff; box-shadow:0 3px 8px rgba(0,0,0,.15), 0 1px 1px rgba(0,0,0,.16);
+  transition:transform .22s cubic-bezier(.32,.72,0,1);
+}
+.switch[aria-checked="true"]::after{ transform:translateX(20px); }
+
+/* ---------- 20. Faixa Folio+ ---------- */
+.plus-hero{ position:relative; padding:0 var(--margin); min-height:min(62dvh,470px); display:flex; flex-direction:column; justify-content:flex-end; }
+.plus-wordmark{ font:800 3.25rem/1 var(--ui); letter-spacing:-.045em; display:flex; align-items:baseline; gap:1px; }
+.plus-wordmark i{ font-style:normal; font-weight:400; }
+.plus-pitch{ font:var(--f-title3); letter-spacing:var(--tr-title3); color:var(--label); text-wrap:balance; margin-top:12px; max-width:22ch; }
+.plus-price{ font:var(--f-subhead); letter-spacing:var(--tr-subhead); color:var(--label-2); margin-top:8px; }
+.plus-actions{ display:flex; gap:10px; margin-top:16px; padding-bottom:6px; }
+.legal{ font:var(--f-caption2); letter-spacing:var(--tr-caption2); color:var(--label-3); padding:14px var(--margin) 0; max-width:56ch; }
+.legal a{ color:var(--label-2); }
+
+/* ---------- 21. Utilitários ---------- */
+.vh{ position:absolute!important; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; }
+.divider{ height:.5px; background:var(--sep); margin:22px var(--margin) 0; }
+.toast{
+  position:absolute; left:50%; bottom:calc(var(--tabbar-h) + var(--safe-bottom) + 18px); transform:translate(-50%,10px);
+  z-index:120; background:var(--mat-thick); -webkit-backdrop-filter:var(--mat-blur); backdrop-filter:var(--mat-blur);
+  color:var(--label); padding:10px 18px; border-radius:var(--radius-btn); box-shadow:var(--shadow-pop), 0 0 0 .5px var(--hairline);
+  font:var(--f-subhead); letter-spacing:var(--tr-subhead); font-weight:500;
+  opacity:0; visibility:hidden; transition:opacity .22s ease-out, transform .22s ease-out, visibility .22s;
+  max-width:calc(100% - 40px); text-align:center;
+}
+.toast.is-on{ opacity:1; visibility:visible; transform:translate(-50%,0); }
+</style>
+</head>
+<body>
+<svg class="vh" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.6S10 4.6 6.5 4.6c-1.5 0-2.5.3-2.5.3v13s1-.3 2.5-.3c3.5 0 5.5 2 5.5 2s2-2 5.5-2c1.5 0 2.5.3 2.5.3v-13s-1-.3-2.5-.3c-3.5 0-5.5 2-5.5 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6.6v13" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-book-fill" viewBox="0 0 24 24"><path d="M11.2 6.9C10.3 6 8.6 4.6 6.5 4.6c-1.5 0-2.5.3-2.5.3v13s1-.3 2.5-.3c2.6 0 4.3 1.1 4.7 1.5V6.9Zm1.6 0v12.2c.4-.4 2.1-1.5 4.7-1.5 1.5 0 2.5.3 2.5.3v-13s-1-.3-2.5-.3c-2.1 0-3.8 1.4-4.7 2.3Z" fill="currentColor"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5.4 8h13.2l-.85 11.1A2.1 2.1 0 0 1 15.66 21H8.34a2.1 2.1 0 0 1-2.09-1.9L5.4 8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.1 8.6V6.6a2.9 2.9 0 0 1 5.8 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-bag-fill" viewBox="0 0 24 24"><path d="M8.3 8V6.6a3.7 3.7 0 0 1 7.4 0V8h2.9l-.85 11.1A2.1 2.1 0 0 1 15.66 21H8.34a2.1 2.1 0 0 1-2.09-1.9L5.4 8h2.9Zm1.6 0h4.2V6.6a2.1 2.1 0 0 0-4.2 0V8Z" fill="currentColor"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.6" cy="10.6" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M15.4 15.4 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-books" viewBox="0 0 24 24"><rect x="3.4" y="5" width="3.6" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.55"/><rect x="8.6" y="5" width="3.6" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.55"/><path d="m14.9 6.6 3.3.9a1 1 0 0 1 .7 1.23L15.9 19.3l-3.05-.83" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/></symbol>
+  <symbol id="i-books-fill" viewBox="0 0 24 24"><rect x="3.4" y="5" width="3.6" height="14" rx="1" fill="currentColor"/><rect x="8.6" y="5" width="3.6" height="14" rx="1" fill="currentColor"/><path d="m14.6 5.8 3.6 1a1.2 1.2 0 0 1 .84 1.47L15.8 19.6l-2.5-.68V6.6l1.3-.8Z" fill="currentColor"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.2 4.8 7.2 7.2-7.2 7.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.8 4.8 7.6 12l7.2 7.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m4.8 9 7.2 7.2L19.2 9" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7.6 5.1a.6.6 0 0 1 .92-.5l10 6.9a.6.6 0 0 1 0 1l-10 6.9a.6.6 0 0 1-.92-.5V5.1Z" fill="currentColor"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4.6v14.8M4.6 12h14.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.6 4.9 4.9L19.4 7.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.4v9.2m0 0-3.4-3.4M12 16.6l3.4-3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-downloaded" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="currentColor"/><path d="m8 12.2 2.8 2.8L16.2 9.6" fill="none" stroke="var(--bg)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15.2V3.6m0 0L8.6 7M12 3.6 15.4 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6 10.6h-.4A1.8 1.8 0 0 0 4.4 12.4v6.4a1.8 1.8 0 0 0 1.8 1.8h11.6a1.8 1.8 0 0 0 1.8-1.8v-6.4a1.8 1.8 0 0 0-1.8-1.8h-.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="5.6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.4" cy="12" r="1.7" fill="currentColor"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><circle cx="4.6" cy="6.6" r="1.3" fill="currentColor"/><circle cx="4.6" cy="12" r="1.3" fill="currentColor"/><circle cx="4.6" cy="17.4" r="1.3" fill="currentColor"/><path d="M8.6 6.6h11M8.6 12h11M8.6 17.4h11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.6 5.4A1.4 1.4 0 0 1 8 4h8a1.4 1.4 0 0 1 1.4 1.4v14.2L12 15.8l-5.4 3.8V5.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bookmark-fill" viewBox="0 0 24 24"><path d="M6.6 5.4A1.4 1.4 0 0 1 8 4h8a1.4 1.4 0 0 1 1.4 1.4v14.2L12 15.8l-5.4 3.8V5.4Z" fill="currentColor"/></symbol>
+  <symbol id="i-xcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m9 9 6 6m0-6-6 6" fill="none" stroke="var(--bg-2)" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-person-fill" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.95" fill="currentColor"/><path d="M12 13.5c-4 0-7.2 2.3-7.2 5 0 .95.75 1.5 1.8 1.5h10.8c1.05 0 1.8-.55 1.8-1.5 0-2.7-3.2-5-7.2-5Z" fill="currentColor"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.9" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.9 18.8a7 7 0 0 1 12.2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4.6 15.4v-3.2a7.4 7.4 0 0 1 14.8 0v3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="3" y="13.6" width="3.8" height="6.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="17.2" y="13.6" width="3.8" height="6.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.6 2.6 5.5 5.9.8-4.3 4.2 1 6-5.2-2.9-5.2 2.9 1-6L3.5 9.9l5.9-.8L12 3.6Z" fill="currentColor"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="7.9" r="1.05" fill="currentColor"/></symbol>
+  <symbol id="i-aa" viewBox="0 0 24 24"><text x="12" y="17" text-anchor="middle" font-family="inherit" font-size="15" font-weight="600" fill="currentColor">Aa</text></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5.4 12h13.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+</defs></svg>
+
+<div class="stage">
+<div class="device sq" id="device">
+
+  <div class="screens">
+
+    <!-- ============ ABA 1: LER AGORA ============ -->
+    <section class="screen is-active" id="scr-now" role="tabpanel" aria-labelledby="tab-now" tabindex="-1">
+      <nav class="navbar is-solid" id="nav-now">
+        <div class="navbar-row">
+          <span style="min-width:44px"></span>
+          <h1 class="nav-wordmark">folio</h1>
+          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira">
+            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
+          </button>
+        </div>
+      </nav>
+      <div class="scroller" data-nav="nav-now" data-nav-from="-1">
+        <div class="billboard">
+          <div class="bb-track" id="bb-track" role="group" aria-roledescription="carrossel" aria-label="Destaques"></div>
+          <div class="bb-dots" id="bb-dots" role="tablist" aria-label="Selecionar destaque"></div>
+        </div>
+        <div id="now-shelves"></div>
+        <div class="scroller-pad"></div>
+      </div>
+    </section>
+
+    <!-- ============ ABA 2: FOLIO+ ============ -->
+    <section class="screen" id="scr-plus" role="tabpanel" aria-labelledby="tab-plus" tabindex="-1">
+      <nav class="navbar" id="nav-plus">
+        <div class="navbar-row">
+          <span style="min-width:44px"></span>
+          <h1 class="navbar-title">Folio+</h1>
+          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira">
+            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
+          </button>
+        </div>
+      </nav>
+      <div class="scroller" data-nav="nav-plus" data-nav-from="150">
+        <div class="plus-hero">
+          <div class="bb-art" aria-hidden="true" style="background:radial-gradient(74% 46% at 22% 14%,#C9A227A6 0%,rgba(0,0,0,0) 60%),radial-gradient(58% 38% at 86% 26%,#EFE7D52E 0%,rgba(0,0,0,0) 62%),radial-gradient(126% 84% at 92% 96%,#1E2E4A 0%,rgba(0,0,0,0) 64%),linear-gradient(163deg,#1E2E4A 0%,#080F1C 92%)">
+            <span style="position:absolute;left:6%;top:4%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#C9A227C4 0%,#C9A22733 40%,rgba(0,0,0,0) 66%)"></span>
+            <span class="bb-grain"></span>
+          </div>
+          <div class="bb-scrim"></div><div class="bb-scrim-top"></div>
+          <div style="position:relative;z-index:2">
+            <p class="plus-wordmark">folio<i>+</i></p>
+            <p class="plus-pitch">Todo o acervo, sem anúncios, com narração e sincronia entre dispositivos.</p>
+            <p class="plus-price">R$ 19,90/mês depois de 7 dias grátis. Cancele quando quiser.</p>
+            <div class="plus-actions">
+              <button class="btn btn-prominent" type="button" data-act="subscribe">Assinar teste grátis</button>
+              <button class="btn btn-gray" type="button" data-act="restore">Restaurar compras</button>
+            </div>
+          </div>
+        </div>
+        <div id="plus-shelves"></div>
+        <p class="legal" id="plus-legal"></p>
+        <div class="scroller-pad"></div>
+      </div>
+    </section>
+
+    <!-- ============ ABA 3: BUSCAR ============ -->
+    <section class="screen" id="scr-search" role="tabpanel" aria-labelledby="tab-search" tabindex="-1">
+      <nav class="navbar is-solid" id="nav-search">
+        <div class="navbar-row"><span style="min-width:44px"></span><h1 class="navbar-title">Buscar</h1><span style="min-width:44px"></span></div>
+      </nav>
+      <div class="scroller" data-nav="nav-search" data-nav-from="34">
+        <div style="height:calc(var(--safe-top) + var(--navbar-h))"></div>
+        <h2 class="large-title">Buscar</h2>
+        <div class="searchfield">
+          <label class="sf-box" for="q">
+            <svg width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
+            <input id="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
+                   placeholder="Livros, autores, coleções" aria-label="Buscar livros, autores e coleções">
+            <button class="btn-clear" type="button" id="q-clear" aria-label="Limpar busca" hidden
+                    style="min-width:28px;min-height:28px;display:grid;place-items:center;color:var(--label-3)">
+              <svg width="17" height="17" aria-hidden="true"><use href="#i-xcircle"/></svg>
+            </button>
+          </label>
+          <button class="sf-cancel" type="button" id="q-cancel" hidden>Cancelar</button>
+        </div>
+        <div id="search-body"></div>
+        <div class="scroller-pad"></div>
+      </div>
+    </section>
+
+    <!-- ============ ABA 5: BIBLIOTECA ============ -->
+    <section class="screen" id="scr-lib" role="tabpanel" aria-labelledby="tab-lib" tabindex="-1">
+      <nav class="navbar" id="nav-lib">
+        <div class="navbar-row"><span style="min-width:44px"></span><h1 class="navbar-title">Biblioteca</h1><span style="min-width:44px"></span></div>
+      </nav>
+      <div class="scroller" data-nav="nav-lib" data-nav-from="34">
+        <div style="height:calc(var(--safe-top) + var(--navbar-h))"></div>
+        <div class="large-title-row">
+          <h2 class="large-title">Biblioteca</h2>
+          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira" style="margin-bottom:6px">
+            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
+          </button>
+        </div>
+        <div class="segmented" role="tablist" aria-label="Filtrar biblioteca" id="lib-seg">
+          <button class="seg" type="button" role="tab" aria-selected="true" data-seg="lendo">Lendo</button>
+          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="quero">Quero ler</button>
+          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="fim">Concluídos</button>
+          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="off">Baixados</button>
+        </div>
+        <div id="lib-body"></div>
+        <div class="scroller-pad"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ CAMADA: FICHA DO LIVRO ============ -->
+  <div class="stack-layer" id="layer-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" aria-hidden="true">
+    <nav class="navbar" id="nav-detail">
+      <div class="navbar-row">
+        <button class="nav-btn nav-back" type="button" data-close="layer-detail">
+          <svg width="19" height="19" aria-hidden="true"><use href="#i-chev-l"/></svg><span id="detail-backlabel">Voltar</span>
+        </button>
+        <h2 class="navbar-title" id="detail-navtitle"></h2>
+        <button class="nav-btn" type="button" data-act="share" aria-label="Compartilhar">
+          <svg width="21" height="21" aria-hidden="true"><use href="#i-share"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div class="scroller" data-nav="nav-detail" data-nav-from="210" id="detail-scroller">
+      <div id="detail-body"></div>
+      <div style="height:34px"></div>
+    </div>
+  </div>
+
+  <!-- ============ CAMADA: LEITOR ============ -->
+  <div class="stack-layer reader" id="layer-reader" data-rtheme="night" role="dialog" aria-modal="true" aria-label="Leitor" aria-hidden="true">
+    <nav class="navbar is-solid" id="nav-reader">
+      <div class="navbar-row">
+        <button class="nav-btn nav-back" type="button" data-close="layer-reader" aria-label="Fechar leitor e voltar">
+          <svg width="19" height="19" aria-hidden="true"><use href="#i-chev-l"/></svg>
+        </button>
+        <h2 class="navbar-title" id="reader-navtitle"></h2>
+        <button class="nav-btn" type="button" data-sheet="sheet-toc" aria-label="Sumário e marcadores">
+          <svg width="20" height="20" aria-hidden="true"><use href="#i-list"/></svg>
+        </button>
+        <button class="nav-btn" type="button" data-sheet="sheet-aa" aria-label="Opções de exibição e tipografia">
+          <svg width="22" height="22" aria-hidden="true"><use href="#i-aa"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div class="reader-page" id="reader-page">
+      <div class="reader-col" id="reader-col"></div>
+      <div class="reader-tap">
+        <button type="button" data-page="-1" aria-label="Página anterior"></button>
+        <button type="button" data-page="0" aria-label="Mostrar ou ocultar controles"></button>
+        <button type="button" data-page="1" aria-label="Próxima página"></button>
+      </div>
+    </div>
+    <div class="reader-foot">
+      <span id="reader-left"></span>
+      <span id="reader-pos"></span>
+    </div>
+  </div>
+
+  <!-- ============ BARRA DE ABAS ============ -->
+  <nav class="tabbar" aria-label="Navegação principal">
+    <div class="tabbar-row" role="tablist">
+      <button class="tab" type="button" role="tab" id="tab-now" aria-controls="scr-now" aria-selected="true" data-tab="now">
+        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-book-fill"/></svg></span>
+        <span class="tab-label">Folio</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-plus" aria-controls="scr-plus" aria-selected="false" data-tab="plus">
+        <span class="tab-pill"><span class="wordmark" aria-hidden="true">folio+</span></span>
+        <span class="tab-label">Folio+</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-lib" aria-controls="scr-lib" aria-selected="false" data-tab="lib">
+        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-books"/></svg></span>
+        <span class="tab-label">Biblioteca</span>
+      </button>
+      <button class="tab" type="button" role="tab" id="tab-search" aria-controls="scr-search" aria-selected="false" data-tab="search">
+        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-search"/></svg></span>
+        <span class="tab-label">Buscar</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============ FOLHAS MODAIS ============ -->
+  <div class="sheet-scrim" id="scrim" hidden></div>
+
+  <aside class="sheet" id="sheet-aa" role="dialog" aria-modal="true" aria-labelledby="aa-h" aria-hidden="true">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-head"><h3 id="aa-h">Exibição</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
+
+    <div class="sheet-group">
+      <h4>Tamanho do texto</h4>
+      <div class="stepper">
+        <button type="button" id="rd-smaller" aria-label="Diminuir tamanho do texto"><span class="s-a" style="font-size:15px">A</span></button>
+        <button type="button" id="rd-bigger" aria-label="Aumentar tamanho do texto"><span class="s-a" style="font-size:22px">A</span></button>
+      </div>
+      <p class="list-note" id="rd-size-note" aria-live="polite"></p>
+    </div>
+
+    <div class="sheet-group">
+      <h4>Tema</h4>
+      <div class="theme-row" id="rd-themes">
+        <button class="theme-swatch" type="button" data-rtheme="original" aria-pressed="false" aria-label="Tema Original" style="background:#FFF;color:#000">Aa</button>
+        <button class="theme-swatch" type="button" data-rtheme="quiet" aria-pressed="false" aria-label="Tema Suave" style="background:#F7F2E7;color:#2B2620">Aa</button>
+        <button class="theme-swatch" type="button" data-rtheme="paper" aria-pressed="false" aria-label="Tema Papel" style="background:#D9D2C4;color:#25211B">Aa</button>
+        <button class="theme-swatch" type="button" data-rtheme="night" aria-pressed="true" aria-label="Tema Noite" style="background:#000;color:#EBEBF5">Aa</button>
+      </div>
+    </div>
+
+    <div class="sheet-group">
+      <h4>Fonte</h4>
+      <div class="list font-list" id="rd-fonts"></div>
+    </div>
+
+    <div class="sheet-group">
+      <div class="list">
+        <button class="list-row" type="button" id="rd-scroll" role="switch" aria-checked="false">
+          <span>Rolagem contínua</span><span class="switch" aria-hidden="true"></span>
+        </button>
+        <button class="list-row" type="button" id="rd-auto" role="switch" aria-checked="true">
+          <span>Acompanhar aparência do sistema</span><span class="switch" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="sheet" id="sheet-toc" role="dialog" aria-modal="true" aria-labelledby="toc-h" aria-hidden="true">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-head"><h3 id="toc-h">Sumário</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
+    <div class="list" id="toc-list"></div>
+  </aside>
+
+  <aside class="sheet" id="sheet-account" role="dialog" aria-modal="true" aria-labelledby="acc-h" aria-hidden="true">
+    <div class="grabber" aria-hidden="true"></div>
+    <div class="sheet-head"><h3 id="acc-h">Conta</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
+
+    <div class="sheet-group">
+      <div class="list">
+        <div class="list-row"><span class="avatar" aria-hidden="true" style="width:38px;height:38px;font-size:.875rem">AM</span>
+          <span><b style="font:var(--f-headline);letter-spacing:var(--tr-headline)">Alex Meira</b><br>
+          <small style="font:var(--f-footnote);letter-spacing:var(--tr-footnote);color:var(--label-2)">Folio+ · renova em 3 de outubro</small></span>
+        </div>
+        <button class="list-row" type="button" data-act="manage"><span>Gerenciar assinatura</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+        <button class="list-row" type="button" data-act="restore"><span>Restaurar compras</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+      </div>
+    </div>
+
+    <div class="sheet-group">
+      <h4>Aparência</h4>
+      <div class="segmented" id="appearance" role="tablist" aria-label="Aparência do app" style="margin:0">
+        <button class="seg" type="button" role="tab" data-appear="auto" aria-selected="true">Sistema</button>
+        <button class="seg" type="button" role="tab" data-appear="light" aria-selected="false">Claro</button>
+        <button class="seg" type="button" role="tab" data-appear="dark" aria-selected="false">Escuro</button>
+      </div>
+    </div>
+
+    <div class="sheet-group">
+      <h4>Tamanho do texto do app</h4>
+      <div class="stepper">
+        <button type="button" id="dt-smaller" aria-label="Diminuir tamanho do texto do app"><svg width="20" height="20" aria-hidden="true"><use href="#i-minus"/></svg></button>
+        <button type="button" id="dt-reset" aria-label="Restaurar tamanho padrão"><span style="font:var(--f-subhead);font-weight:600" id="dt-value">Padrão</span></button>
+        <button type="button" id="dt-bigger" aria-label="Aumentar tamanho do texto do app"><svg width="20" height="20" aria-hidden="true"><use href="#i-plus"/></svg></button>
+      </div>
+      <p class="list-note">Acompanha o Tamanho do Texto do sistema (Dynamic Type). Este controle ajusta apenas o Folio.</p>
+    </div>
+
+    <div class="sheet-group">
+      <h4>Privacidade e dados</h4>
+      <div class="list">
+        <button class="list-row" type="button" role="switch" aria-checked="false" data-act="analytics">
+          <span>Compartilhar análises de leitura</span><span class="switch" aria-hidden="true"></span>
+        </button>
+        <button class="list-row" type="button" data-act="privacy"><span>Política de privacidade</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+        <button class="list-row" type="button" data-act="export"><span>Baixar meus dados</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+        <button class="list-row" type="button" data-act="delete"><span style="color:var(--sys-red)">Apagar conta</span></button>
+      </div>
+      <p class="list-note">A coleta é desativada por padrão e pode ser revogada a qualquer momento. Apagar a conta remove leitura, marcadores e notas em até 30 dias.</p>
+    </div>
+
+    <div class="sheet-group">
+      <div class="list">
+        <button class="list-row" type="button" data-act="report"><span>Denunciar um problema no conteúdo</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
+        <button class="list-row" type="button" data-act="support"><span>Suporte</span><span class="lr-value">suporte@folio.app</span></button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+</div>
+
+<script>
+/* ============================================================
+   FOLIO — dados
+   Acervo em domínio público (Lei 9.610/98, art. 41). Nenhum texto
+   ou marca de terceiros protegido é usado. Ver DIRETRIZES.md § 5.2.
+   ============================================================ */
+"use strict";
+
+/* Paletas das capas — arte editorial, independente da paleta de UI da Apple */
+const PAL = [
+  { g:["#1E2E4A","#080F1C"], ink:"#EFE7D5", acc:"#C9A227" },
+  { g:["#7B2D26","#240808"], ink:"#F4E8D7", acc:"#E0A458" },
+  { g:["#2C4034","#0C1712"], ink:"#EDE9DA", acc:"#B7C4A0" },
+  { g:["#3A2A46","#120A1B"], ink:"#EDE4F2", acc:"#C9A6E0" },
+  { g:["#8A6A2F","#2A1E0A"], ink:"#FBF3E0", acc:"#F0D08A" },
+  { g:["#1A3B47","#06161C"], ink:"#E3EFF2", acc:"#6FB3C4" },
+  { g:["#5B1F35","#1B0710"], ink:"#F6E3E9", acc:"#DE7C97" },
+  { g:["#403A32","#141210"], ink:"#F0EBE1", acc:"#C4A484" },
+  { g:["#0F2E28","#04120F"], ink:"#DFF0EA", acc:"#54B79A" },
+  { g:["#4A2410","#170A04"], ink:"#F5E5D3", acc:"#D98E48" },
+  { g:["#242A38","#0B0E14"], ink:"#E6E9F0", acc:"#8FA3C8" },
+  { g:["#6B2E45","#200A14"], ink:"#F7E6EC", acc:"#E39CB4" }
+];
+const VARIANTS = ["rule","band","type","frame","arc"];
+
+/* Aberturas autênticas (domínio público) usadas na amostra do leitor */
+const OPEN = {
+  casmurro: ["Uma noite destas, vindo da cidade para o Engenho Novo, encontrei num trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéu. Cumprimentou-me, sentou-se ao pé de mim, falou da lua e dos ministros, e acabou recitando-me versos."],
+  brascubas: ["Algum tempo hesitei se devia abrir estas memórias pelo princípio ou pelo fim, isto é, se poria em primeiro lugar o meu nascimento ou a minha morte."],
+  cortico: ["João Romão foi, dos treze aos vinte e cinco anos, empregado de um vendeiro que enriqueceu entre as quatro paredes de uma suja e obscura taverna nos refolhos do bairro do Botafogo."],
+  vidassecas: ["Na planície avermelhada os juazeiros alargavam duas manchas verdes. Os infelizes tinham caminhado o dia inteiro, estavam cansados e famintos."],
+  metamorfose: ["Certa manhã, ao despertar de sonhos intranquilos, Gregor Samsa encontrou-se em sua cama metamorfoseado num inseto monstruoso."],
+  orgulho: ["É uma verdade universalmente reconhecida que um homem solteiro, em posse de boa fortuna, deve estar necessitado de uma esposa."],
+  moby: ["Chamem-me Ishmael. Há alguns anos — não importa quantos ao certo — tendo pouco ou nenhum dinheiro na bolsa, e nada de particular que me interessasse em terra, pensei em navegar um pouco e ver a parte aquosa do mundo."],
+  iracema: ["Verdes mares bravios de minha terra natal, onde canta a jandaia nas frondes da carnaúba."],
+  macunaima: ["No fundo do mato-virgem nasceu Macunaíma, herói de nossa gente. Era preto retinto e filho do medo da noite."],
+  alienista: ["As crônicas da vila de Itaguaí dizem que em tempos remotos vivera ali um certo médico, o Dr. Simão Bacamarte, filho da nobreza da terra e o maior dos médicos do Brasil, de Portugal e das Espanhas."],
+  quaresma: ["O major Policarpo Quaresma, mais conhecido por Quaresma simplesmente, era funcionário público, subsecretário do Arsenal de Guerra."],
+  sertoes: ["O planalto central do Brasil desce, nos litorais do sul, em escarpas inteiriças, altas e abruptas."],
+  ateneu: ["Vais encontrar o mundo, disse-me meu pai, à porta do Ateneu. Coragem para a luta."],
+  dorian: ["O ateliê estava impregnado do forte odor das rosas, e quando a leve brisa de verão agitava as árvores do jardim, entrava pela porta aberta o pesado perfume dos lilases."],
+  frankenstein: ["Ficarás satisfeito ao saber que nenhum desastre acompanhou o início de um empreendimento que encaraste com tão maus presságios."],
+  crime: ["No começo de julho, por um calor excessivo, ao cair da tarde, um jovem deixou o cubículo que sublocava na travessa S. e, lentamente, como indeciso, encaminhou-se para a ponte K."]
+};
+
+const BOOKS = [
+  { id:"casmurro", t:"Dom Casmurro", a:"Machado de Assis", y:1899, pal:0, v:"rule", g:"Clássicos brasileiros", pages:208, mins:312, rate:4.8, plus:true, narr:true,
+    d:"Bento Santiago decide reconstruir a casa da infância e, com ela, a memória de Capitu. O que sai é menos uma confissão do que um processo — em que o narrador acumula provas, escolhe testemunhas e nunca chama a defesa. A ambiguidade é o método, não o defeito.",
+    open:OPEN.casmurro },
+  { id:"brascubas", t:"Memórias Póstumas de Brás Cubas", a:"Machado de Assis", y:1881, pal:7, v:"type", g:"Clássicos brasileiros", pages:224, mins:334, rate:4.9, plus:true, narr:true,
+    d:"Um defunto autor escreve da sepultura, sem pressa e sem obrigação de agradar. Cento e sessenta capítulos curtos, alguns de três linhas, para contar uma vida que não deu em nada — e para provar que isso é assunto suficiente.",
+    open:OPEN.brascubas },
+  { id:"quincas", t:"Quincas Borba", a:"Machado de Assis", y:1891, pal:2, v:"band", g:"Clássicos brasileiros", pages:200, mins:298, rate:4.6, plus:true,
+    d:"Rubião herda uma fortuna, um cachorro e uma filosofia: o Humanitismo, que ensina que ao vencedor as batatas. A herança se gasta; a filosofia, não.",
+    open:["Rubião fitava a enseada — eram oito horas da manhã. Quem o visse, com os polegares metidos no cordão do chambre, à janela de uma grande casa em Botafogo, cuidaria que ele admirava aquele pedaço de água quieta."] },
+  { id:"alienista", t:"O Alienista", a:"Machado de Assis", y:1882, pal:6, v:"frame", g:"Clássicos brasileiros", pages:96, mins:142, rate:4.7, plus:true, narr:true,
+    d:"Um médico funda a Casa Verde para estudar a loucura e acaba internando quase toda Itaguaí. Quando percebe que os sãos é que são exceção, inverte o critério — com a mesma serenidade científica.",
+    open:OPEN.alienista },
+  { id:"helena", t:"Helena", a:"Machado de Assis", y:1876, pal:11, v:"arc", g:"Romance", pages:176, mins:262, rate:4.2,
+    d:"Um testamento apresenta à família Vale uma filha que ninguém conhecia. O romantismo ainda governa a superfície; por baixo já trabalha o ironista que Machado seria.",
+    open:["O conselheiro Vale morreu às sete horas da noite de 25 de abril de 1859. Morreu de uma apoplexia fulminante, pouco depois de cochilar a sesta."] },
+  { id:"cortico", t:"O Cortiço", a:"Aluísio Azevedo", y:1890, pal:9, v:"band", g:"Realismo", pages:256, mins:382, rate:4.5, plus:true, narr:true,
+    d:"São Romão cresce como organismo: quartos que se multiplicam, gente que se aglomera, dinheiro que se acumula num só bolso. O protagonista não é João Romão — é o cortiço.",
+    open:OPEN.cortico },
+  { id:"pensao", t:"Casa de Pensão", a:"Aluísio Azevedo", y:1884, pal:8, v:"rule", g:"Realismo", pages:240, mins:358, rate:4.1,
+    d:"Um estudante maranhense chega ao Rio e cai numa engrenagem de hospedagem, honra e chantagem. Inspirado num caso real que dividiu a imprensa da época.",
+    open:["Amâncio de Vasconcelos era filho único de um pequeno negociante de São Luís do Maranhão."] },
+  { id:"quaresma", t:"Triste Fim de Policarpo Quaresma", a:"Lima Barreto", y:1915, pal:4, v:"type", g:"Clássicos brasileiros", pages:192, mins:286, rate:4.6, plus:true,
+    d:"Um patriota radical resolve levar o Brasil a sério: propõe o tupi como língua oficial, tenta a agricultura, adere à revolta. O país responde a cada gesto com o mesmo silêncio administrativo.",
+    open:OPEN.quaresma },
+  { id:"ateneu", t:"O Ateneu", a:"Raul Pompeia", y:1888, pal:3, v:"frame", g:"Clássicos brasileiros", pages:184, mins:274, rate:4.3, plus:true,
+    d:"Crônica de saudades de um internato que funciona como miniatura do mundo adulto: hierarquia, espetáculo e crueldade, tudo com uniforme.",
+    open:OPEN.ateneu },
+  { id:"sargento", t:"Memórias de um Sargento de Milícias", a:"Manuel Antônio de Almeida", y:1854, pal:5, v:"arc", g:"Clássicos brasileiros", pages:168, mins:250, rate:4.2,
+    d:"O Rio do tempo do rei visto de baixo, por um menino levado que atravessa a cidade sem nunca escolher um lado. Malandragem antes de existir a palavra.",
+    open:["Era no tempo do rei. Uma das quatro esquinas que formam as ruas do Ouvidor e da Quitanda chamava-se nesse tempo o canto dos meirinhos."] },
+  { id:"iracema", t:"Iracema", a:"José de Alencar", y:1865, pal:8, v:"arc", g:"Clássicos brasileiros", pages:128, mins:190, rate:4.1, narr:true,
+    d:"Lenda do Ceará escrita como poema em prosa. Alencar inventa aqui um português de sintaxe indígena — o experimento formal é o coração do livro.",
+    open:OPEN.iracema },
+  { id:"guarani", t:"O Guarani", a:"José de Alencar", y:1857, pal:2, v:"band", g:"Romance", pages:320, mins:476, rate:4.0,
+    d:"Fidalguia portuguesa, mata fechada e um herói indígena idealizado. O romance que fundou o imaginário nacional — e a ópera de Carlos Gomes.",
+    open:["De um dos cabeços da serra dos Órgãos desliza um fio de água que se dirige para o norte, e engrossado com os mananciais que recebe no seu curso de dez léguas, torna-se rio caudal."] },
+  { id:"senhora", t:"Senhora", a:"José de Alencar", y:1875, pal:11, v:"type", g:"Romance", pages:224, mins:334, rate:4.4,
+    d:"Aurélia herda uma fortuna e compra o noivo que a rejeitou por dinheiro. Um romance sobre preço, contrato e a impossibilidade de quitar uma humilhação.",
+    open:["Há anos raiou no céu fluminense uma nova estrela. Desde o momento de sua ascensão ninguém lhe disputou o cetro."] },
+  { id:"vidassecas", t:"Vidas Secas", a:"Graciliano Ramos", y:1938, pal:10, v:"rule", g:"Modernismo", pages:176, mins:262, rate:4.9, plus:true, narr:true,
+    d:"Treze capítulos que podem ser lidos em qualquer ordem, porque a seca também não tem começo. Fabiano mal encontra palavras; a cadela Baleia é quem pensa com mais clareza.",
+    open:OPEN.vidassecas },
+  { id:"saobernardo", t:"São Bernardo", a:"Graciliano Ramos", y:1934, pal:7, v:"type", g:"Modernismo", pages:192, mins:286, rate:4.7, plus:true,
+    d:"Paulo Honório narra como tomou a fazenda, a mulher e a própria linguagem. A prosa é seca porque o narrador é seco — e descobre tarde demais o que isso custou.",
+    open:["Antes de iniciar este livro, imaginei construí-lo pela divisão do trabalho."] },
+  { id:"macunaima", t:"Macunaíma", a:"Mário de Andrade", y:1928, pal:9, v:"band", g:"Modernismo", pages:208, mins:310, rate:4.4, plus:true,
+    d:"Rapsódia feita de lendas de todo o país costuradas sem hierarquia. O herói sem nenhum caráter atravessa o Brasil como quem troca de mito.",
+    open:OPEN.macunaima },
+  { id:"sertoes", t:"Os Sertões", a:"Euclides da Cunha", y:1902, pal:10, v:"frame", g:"História", pages:512, mins:764, rate:4.6, plus:true,
+    d:"A terra, o homem, a luta. Reportagem, geologia e tragédia sobre Canudos, escrita por quem foi ver e voltou com a tese destruída.",
+    open:OPEN.sertoes },
+  { id:"espumas", t:"Espumas Flutuantes", a:"Castro Alves", y:1870, pal:5, v:"arc", g:"Poesia", pages:112, mins:96, rate:4.3, narr:true,
+    d:"O único livro que Castro Alves publicou em vida. Amor, mar e liberdade em versos feitos para serem ditos em voz alta.",
+    open:["Ela é o pássaro noturno / Que voa na escuridão."] },
+  { id:"moreninha", t:"A Moreninha", a:"Joaquim Manuel de Macedo", y:1844, pal:6, v:"arc", g:"Romance", pages:144, mins:214, rate:3.9,
+    d:"Uma aposta entre estudantes, uma ilha e um segredo de infância. O primeiro best-seller brasileiro, e ainda o mais leve deles.",
+    open:["Era uma sexta-feira. Augusto, Fabrício, Leopoldo e Filipe achavam-se reunidos no gabinete de estudo do primeiro."] },
+  { id:"taverna", t:"Noite na Taverna", a:"Álvares de Azevedo", y:1855, pal:3, v:"frame", g:"Terror gótico", pages:120, mins:178, rate:4.2, plus:true,
+    d:"Cinco homens bebem e contam, cada um, a pior coisa que já fizeram. Byron traduzido para a boemia paulistana do século XIX.",
+    open:["Silêncio, moços! Acabai com essa algazarra de embriaguez. Não vedes que também eu quero contar-vos uma história?"] },
+  { id:"primobasilio", t:"O Primo Basílio", a:"Eça de Queirós", y:1878, pal:11, v:"band", g:"Realismo", pages:352, mins:524, rate:4.4,
+    d:"Luísa lê romances demais e vive de menos. Quando o primo volta de longe, o adultério entra em casa com a naturalidade de uma visita marcada.",
+    open:["Tinham dado onze horas no cuco da sala de jantar. Jorge fechou o livro de Luís de Camões e espreguiçou-se."] },
+  { id:"maias", t:"Os Maias", a:"Eça de Queirós", y:1888, pal:0, v:"type", g:"Realismo", pages:704, mins:1048, rate:4.7, plus:true,
+    d:"Três gerações de uma família e o retrato de uma Lisboa que conversa muito e decide pouco. O grande romance português do século XIX.",
+    open:["A casa que os Maias vieram habitar em Lisboa, no outono de 1875, era conhecida na vizinhança da rua de São Francisco de Paula, pela casa do Ramalhete."] },
+  { id:"metamorfose", t:"A Metamorfose", a:"Franz Kafka", y:1915, pal:8, v:"type", g:"Ficção", pages:96, mins:142, rate:4.6, plus:true, narr:true,
+    d:"O caixeiro-viajante acorda inseto e a primeira preocupação da casa é o emprego dele. O absurdo não está na transformação, está na reação de todos a ela.",
+    open:OPEN.metamorfose },
+  { id:"crime", t:"Crime e Castigo", a:"Fiódor Dostoiévski", y:1866, pal:1, v:"rule", g:"Ficção", pages:576, mins:858, rate:4.8, plus:true, narr:true,
+    d:"Raskólnikov testa uma teoria sobre homens extraordinários usando um machado. O romance policial em que o criminoso é conhecido na página trinta e o suspense é moral.",
+    open:OPEN.crime },
+  { id:"orgulho", t:"Orgulho e Preconceito", a:"Jane Austen", y:1813, pal:2, v:"frame", g:"Romance", pages:384, mins:572, rate:4.7, plus:true, narr:true,
+    d:"Cinco irmãs, uma herança que só passa a homens e um vizinho novo com renda anual conhecida. Austen usa o casamento como sistema econômico e a ironia como bisturi.",
+    open:OPEN.orgulho },
+  { id:"moby", t:"Moby Dick", a:"Herman Melville", y:1851, pal:5, v:"band", g:"Ficção", pages:640, mins:952, rate:4.3,
+    d:"Uma caçada, um capitão e uma enciclopédia de baleias no meio do caminho. As digressões não atrapalham o livro — elas são o livro.",
+    open:OPEN.moby },
+  { id:"dorian", t:"O Retrato de Dorian Gray", a:"Oscar Wilde", y:1890, pal:3, v:"arc", g:"Terror gótico", pages:272, mins:404, rate:4.5, plus:true,
+    d:"Um retrato envelhece no sótão enquanto o modelo permanece intacto. Wilde escreveu um conto moral e passou o resto da vida negando que fosse um.",
+    open:OPEN.dorian },
+  { id:"frankenstein", t:"Frankenstein", a:"Mary Shelley", y:1818, pal:6, v:"frame", g:"Terror gótico", pages:280, mins:416, rate:4.4, plus:true, narr:true,
+    d:"Escrito aos dezoito anos, num verão sem sol. A criatura aprende a ler, argumenta melhor que o criador e pede apenas uma coisa — que lhe é negada.",
+    open:OPEN.frankenstein },
+  { id:"dalloway", t:"Mrs. Dalloway", a:"Virginia Woolf", y:1925, pal:4, v:"type", g:"Modernismo", pages:208, mins:310, rate:4.3, plus:true,
+    d:"Um dia em Londres, uma festa à noite e a consciência de várias pessoas atravessada pelo mesmo som de sino. O tempo do relógio contra o tempo da mente.",
+    open:["A sra. Dalloway disse que ela mesma iria comprar as flores."] },
+  { id:"comedia", t:"A Divina Comédia", a:"Dante Alighieri", y:1320, pal:1, v:"frame", g:"Poesia", pages:592, mins:880, rate:4.6,
+    d:"Cem cantos em terça rima, do fundo do Inferno ao Empíreo. A arquitetura mais rigorosa já construída em verso.",
+    open:["No meio do caminho desta vida / me vi perdido numa selva escura, / solitário, sem sol e sem saída."] }
+];
+
+/* Estado de leitura do usuário */
+const STATE_SEED = {
+  casmurro:   { prog:.34, ch:"Capítulo IX — A ópera", left:206, shelf:"lendo",  off:true  },
+  vidassecas: { prog:.72, ch:"Cadeia",                left:73,  shelf:"lendo",  off:true  },
+  brascubas:  { prog:.12, ch:"Capítulo VII — O delírio", left:294, shelf:"lendo", off:false },
+  sertoes:    { prog:.05, ch:"A terra",               left:726, shelf:"lendo",  off:false },
+  metamorfose:{ prog:1,   ch:"Concluído",             left:0,   shelf:"fim",    off:false },
+  alienista:  { prog:1,   ch:"Concluído",             left:0,   shelf:"fim",    off:true  },
+  orgulho:    { prog:1,   ch:"Concluído",             left:0,   shelf:"fim",    off:false },
+  cortico:    { prog:0,   ch:"",                      left:382, shelf:"quero",  off:false },
+  saobernardo:{ prog:0,   ch:"",                      left:286, shelf:"quero",  off:true  },
+  maias:      { prog:0,   ch:"",                      left:1048,shelf:"quero",  off:false },
+  dorian:     { prog:0,   ch:"",                      left:404, shelf:"quero",  off:false },
+  crime:      { prog:0,   ch:"",                      left:858, shelf:"quero",  off:false },
+  quaresma:   { prog:0,   ch:"",                      left:286, shelf:"quero",  off:true  }
+};
+
+/* Coleções curadas (arte 16:9) */
+const COLLECTIONS = [
+  { id:"machado", n:"Machado, do começo ao fim", c:"9 livros", pal:0, ids:["brascubas","casmurro","quincas","alienista","helena"] },
+  { id:"seca",    n:"O Nordeste em prosa",       c:"7 livros", pal:10, ids:["vidassecas","sertoes","saobernardo","quaresma"] },
+  { id:"gotico",  n:"Noites góticas",            c:"6 livros", pal:3, ids:["taverna","frankenstein","dorian","metamorfose"] },
+  { id:"mod22",   n:"Semana de 22 e depois",     c:"8 livros", pal:9, ids:["macunaima","vidassecas","saobernardo","dalloway"] },
+  { id:"romance", n:"Romance do século XIX",     c:"11 livros",c2:true, pal:11, ids:["senhora","orgulho","primobasilio","moreninha","maias"] },
+  { id:"escola",  n:"Leituras do vestibular",    c:"12 livros", pal:6, ids:["casmurro","iracema","cortico","macunaima","quaresma","vidassecas"] }
+];
+
+const CATEGORIES = [
+  { n:"Clássicos brasileiros", pal:0 }, { n:"Realismo", pal:9 },
+  { n:"Modernismo", pal:10 },           { n:"Poesia", pal:5 },
+  { n:"Terror gótico", pal:3 },         { n:"Romance", pal:11 },
+  { n:"História", pal:1 },              { n:"Ficção", pal:6 }
+];
+
+/* Sumário e texto do título em destaque (Machado de Assis, 1899 — domínio público) */
+const CHAPTERS = {
+  casmurro: [
+    { n:"I", t:"Do título", read:1, p:[
+      "Uma noite destas, vindo da cidade para o Engenho Novo, encontrei num trem da Central um rapaz aqui do bairro, que eu conheço de vista e de chapéu. Cumprimentou-me, sentou-se ao pé de mim, falou da lua e dos ministros, e acabou recitando-me versos. A viagem era curta, e os versos pode ser que não fossem inteiramente maus. Sucedeu, porém, que, como eu estava cansado, fechei os olhos três ou quatro vezes; tanto bastou para que ele interrompesse a leitura e metesse os versos no bolso.",
+      "— Continue, disse eu acordando.",
+      "— Já acabei, murmurou ele.",
+      "— São muito bonitos.",
+      "Vi-lhe fazer um gesto para tirá-los outra vez do bolso, mas não passou do gesto; estava amuado. No dia seguinte entrou a dizer de mim nomes feios, e acabou alcunhando-me Dom Casmurro. Os vizinhos, que não gostam dos meus hábitos reclusos e calados, deram curso à alcunha, que afinal pegou. Nem por isso me zanguei. Contei a anedota aos amigos da cidade, e eles, por graça, chamam-me assim, alguns em bilhetes.",
+      "Não consultes dicionários. Casmurro não está aqui no sentido que eles lhe dão, mas no que lhe pôs o vulgo de homem calado e metido consigo. Dom veio por ironia, para atribuir-me fumos de fidalgo. Tudo por estar cochilando! Também não achei melhor título para a minha narração; se não tiver outro daqui até ao fim do livro, vai este mesmo."
+    ]},
+    { n:"II", t:"Do livro", read:1, p:[
+      "Agora que expliquei o título, passo a escrever o livro. Antes disso, porém, digamos os motivos que me põem a pena na mão.",
+      "Vivo só, com um criado. A casa em que moro é própria; fi-la construir de propósito, levado de um desejo tão particular que me vexa imprimi-lo, mas vá lá. Um dia, há bastantes anos, lembrou-me reproduzir no Engenho Novo a casa em que me criei na antiga Rua de Matacavalos, tendo o mesmo aspecto e economia daquela outra, que desapareceu.",
+      "Construtor e pintor entenderam bem as indicações que lhes fiz: é o mesmo prédio assobradado, três janelas de frente, varanda ao fundo, as mesmas alcovas e salas. Na principal destas, a pintura do teto e das paredes é mais ou menos igual, umas grinaldas de flores miúdas e grandes pássaros que as tomam nos bicos, de espaço a espaço.",
+      "O meu fim evidente era atar as duas pontas da vida, e restaurar na velhice a adolescência. Pois, senhor, não consegui recompor o que foi nem o que fui. Em tudo, se o rosto é igual, a fisionomia é diferente."
+    ]},
+    { n:"III", t:"A denúncia", read:1, p:[
+      "Ia a entrar na sala de visitas, quando ouvi proferir o meu nome e escondi-me atrás da porta. A casa era a da Rua de Matacavalos, o mês novembro, o ano é que é um pouco remoto, mas eu não hei de trocar as datas à minha vida só para agradar às pessoas que não amam histórias velhas.",
+      "— Mas, senhor José Dias, insistia minha mãe.",
+      "— Perdão, minha senhora; repito o que disse. As últimas palavras que Escobar me trouxe são graves. É preciso que o menino entre quanto antes para o seminário."
+    ]},
+    { n:"IV", t:"Um dever amaríssimo!", read:1 },
+    { n:"V", t:"O agregado", read:0 },
+    { n:"VI", t:"Tio Cosme", read:0 },
+    { n:"VII", t:"Dona Glória", read:0 },
+    { n:"VIII", t:"É tempo", read:0 },
+    { n:"IX", t:"A ópera", read:0, cur:1 },
+    { n:"X", t:"Aceito a teoria", read:0 },
+    { n:"XI", t:"A promessa", read:0 },
+    { n:"XII", t:"Na varanda", read:0 },
+    { n:"XIII", t:"Capitu", read:0 },
+    { n:"XIV", t:"A inscrição", read:0 },
+    { n:"XV", t:"Outra voz repentina", read:0 }
+  ]
+};
+
+/* ============================================================
+   FOLIO — interface
+   ============================================================ */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+const byId = id => BOOKS.find(b => b.id === id);
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+const STATE = JSON.parse(JSON.stringify(STATE_SEED));
+const readerPrefs = { size:19, theme:"night", font:"literata", scroll:false, autoTheme:true };
+let dtScale = 1, lastFocus = null;
+
+const FONTS = [
+  { id:"literata", n:"Literata",  css:'"Literata","New York",Georgia,serif' },
+  { id:"charter",  n:"Charter",   css:'Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif' },
+  { id:"georgia",  n:"Georgia",   css:'Georgia,"Times New Roman",serif' },
+  { id:"system",   n:"São Francisco", css:'var(--ui)' },
+  { id:"palatino", n:"Palatino",  css:'Palatino,"Palatino Linotype","Book Antiqua",Georgia,serif' }
+];
+
+/* ---------- utilidades ---------- */
+function lastName(a){ const p = a.split(" "); return p[p.length - 1].toUpperCase(); }
+function hhmm(min){
+  if (min <= 0) return "Concluído";
+  const h = Math.floor(min / 60), m = min % 60;
+  return h ? (m ? h + " h " + m + " min" : h + " h") : m + " min";
+}
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("is-on");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("is-on"), 2600);
+}
+
+/* ---------- capas geradas ---------- */
+const VMAP = { rule:"low", band:"plate", type:"center", frame:"stack", arc:"bottom" };
+function coverHTML(book, opt){
+  const p = PAL[book.pal], L = book.t.length, v = VMAP[book.v] || "bottom";
+  const o = opt || {}, st = STATE[book.id];
+  const k = L > 32 ? .54 : L > 24 ? .66 : L > 15 ? .8 : 1;
+  const T = esc(book.t), A = esc(book.a);
+  const fs2 = (base, max) => "font-size:clamp(8px,calc(" + base + "cqw * " + k + ")," + max + "px)";
+  const ground = "background:" +
+    "radial-gradient(88% 52% at 27% 11%, " + p.acc + "8C 0%, rgba(0,0,0,0) 58%)," +
+    "radial-gradient(70% 42% at 84% 34%, " + p.ink + "26 0%, rgba(0,0,0,0) 62%)," +
+    "radial-gradient(132% 96% at 88% 94%, " + p.g[0] + " 0%, rgba(0,0,0,0) 66%)," +
+    "linear-gradient(160deg, " + p.g[0] + " 0%, " + p.g[1] + " 88%)";
+  let art = "", body = "";
+
+  if (v === "center"){
+    art = '<span style="position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);width:82%;aspect-ratio:1;border-radius:50%;' +
+          'background:radial-gradient(circle,' + p.acc + 'D9 0%,' + p.acc + '30 44%,rgba(0,0,0,0) 68%)"></span>' +
+          '<span style="position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);width:26%;aspect-ratio:1;border-radius:50%;background:' + p.ink + ';opacity:.85"></span>';
+    body = '<span class="cover-art" style="justify-content:flex-end;align-items:center;text-align:center;color:' + p.ink + '">' +
+      '<span class="c-title wide" style="' + fs2(10.5, 22) + ';text-transform:uppercase">' + T + '</span>' +
+      '<span class="c-author" style="margin-top:8%">' + A + '</span></span>';
+  } else if (v === "stack"){
+    art = '<span style="position:absolute;inset:0;display:flex">' +
+      [0,1,2,3].map(i => '<span style="flex:1;background:' + (i % 2 ? p.acc : p.g[0]) + ';opacity:' + (.42 + i * .12) + '"></span>').join("") +
+      '</span>';
+    body = '<span class="cover-art" style="justify-content:flex-end;align-items:center;text-align:center;color:' + p.ink + '">' +
+      '<span class="c-title serif" style="' + fs2(14, 30) + '">' + T + '</span>' +
+      '<span class="c-author" style="margin-top:7%">' + A + '</span></span>';
+  } else if (v === "plate"){
+    art = '<span style="position:absolute;inset:-10% -30%;background:linear-gradient(112deg,rgba(0,0,0,0) 38%,' + p.acc + ' 39%,' + p.acc + ' 52%,rgba(0,0,0,0) 53%)"></span>' +
+          '<span style="position:absolute;inset:-10% -30%;background:linear-gradient(112deg,rgba(0,0,0,0) 56%,' + p.ink + '2E 57%,rgba(0,0,0,0) 63%)"></span>';
+    body = '<span class="cover-art" style="justify-content:flex-end;color:' + p.ink + '">' +
+      '<span class="c-title" style="' + fs2(15, 32) + ';text-transform:uppercase">' + T + '</span>' +
+      '<span class="c-author" style="margin-top:6%">' + A + '</span></span>';
+  } else if (v === "low"){
+    art = '<span style="position:absolute;left:-14%;bottom:14%;width:128%;height:34%;background:radial-gradient(60% 100% at 50% 100%,' + p.acc + 'B3 0%,rgba(0,0,0,0) 72%)"></span>' +
+          '<span style="position:absolute;left:8%;right:8%;bottom:29%;height:1.5px;background:' + p.acc + ';opacity:.8"></span>';
+    body = '<span class="cover-art" style="justify-content:flex-end;color:' + p.ink + '">' +
+      '<span class="c-author" style="margin-bottom:5%">' + A + '</span>' +
+      '<span class="c-title" style="' + fs2(16, 34) + ';text-transform:uppercase">' + T + '</span></span>';
+  } else {
+    art = '<span style="position:absolute;right:-22%;top:-14%;width:86%;aspect-ratio:1;border-radius:50%;background:' + p.acc + ';opacity:.88"></span>' +
+          '<span style="position:absolute;left:-18%;top:24%;width:52%;aspect-ratio:1;border-radius:50%;background:' + p.ink + ';opacity:.16"></span>';
+    body = '<span class="cover-art" style="justify-content:flex-end;color:' + p.ink + '">' +
+      '<span class="c-title serif" style="' + fs2(15, 32) + '">' + T + '</span>' +
+      '<span class="c-author" style="margin-top:6%">' + A + '</span></span>';
+  }
+
+  const badge = book.plus ? '<span class="plus-badge" aria-hidden="true">folio+</span>' : "";
+  const prog = (o.prog && st && st.prog > 0 && st.prog < 1)
+    ? '<span class="cover-prog" aria-hidden="true"><i style="width:' + Math.round(st.prog * 100) + '%"></i></span>' : "";
+  const mass = '<span style="position:absolute;left:-12%;right:-12%;bottom:-16%;height:60%;' +
+    'background:radial-gradient(58% 100% at 50% 100%,rgba(0,0,0,.93) 0%,rgba(0,0,0,.5) 44%,rgba(0,0,0,0) 76%)"></span>';
+  return '<span class="cover sq" style="' + ground + '">' + art + mass +
+    '<span class="c-scrim"></span>' + body + badge + prog + '<span class="cover-grain"></span></span>';
+}
+
+/* ---------- arte-chave em CSS (heróis e fundos) ---------- */
+function keyArt(palIdx, cls){
+  const p = PAL[palIdx];
+  const bg = "background:" +
+    "radial-gradient(74% 46% at 22% 14%, " + p.acc + "A6 0%, rgba(0,0,0,0) 60%)," +
+    "radial-gradient(58% 38% at 86% 26%, " + p.ink + "2E 0%, rgba(0,0,0,0) 62%)," +
+    "radial-gradient(126% 84% at 92% 96%, " + p.g[0] + " 0%, rgba(0,0,0,0) 64%)," +
+    "linear-gradient(163deg, " + p.g[0] + " 0%, " + p.g[1] + " 92%)";
+  return '<div class="' + (cls || "bb-art") + '" aria-hidden="true" style="' + bg + '">' +
+    '<span style="position:absolute;left:6%;top:4%;width:70%;aspect-ratio:1;border-radius:50%;' +
+      'background:radial-gradient(circle,' + p.acc + 'C4 0%,' + p.acc + '33 40%,rgba(0,0,0,0) 66%)"></span>' +
+    '<span style="position:absolute;right:-20%;bottom:2%;width:84%;aspect-ratio:1;border-radius:50%;' +
+      'background:radial-gradient(circle,' + p.ink + '24 0%,rgba(0,0,0,0) 64%)"></span>' +
+    '<span style="position:absolute;left:0;right:0;bottom:0;height:52%;' +
+      'background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0))"></span>' +
+    '<span class="bb-grain"></span></div>';
+}
+
+/* ---------- arte gerada em canvas (heróis e fundos) ---------- */
+function paintArt(cv, palIdx, seed){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = cv.clientWidth || 430, h = cv.clientHeight || 480;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const p = PAL[palIdx];
+  let s = (seed * 9301 + 49297) % 233280;
+  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+
+  const base = c.createLinearGradient(0, 0, w * .42, h);
+  base.addColorStop(0, p.g[0]); base.addColorStop(1, p.g[1]);
+  c.fillStyle = base; c.fillRect(0, 0, w, h);
+
+  c.globalCompositeOperation = "screen";
+  const tints = [p.acc, p.g[0], p.acc, p.g[0]];
+  for (let i = 0; i < 5; i++){
+    const x = (.12 + rnd() * .76) * w, y = (.04 + rnd() * .68) * h;
+    const r = (.32 + rnd() * .44) * Math.max(w, h);
+    const g = c.createRadialGradient(x, y, 0, x, y, r);
+    const col = tints[i % 4];
+    g.addColorStop(0, col + (i % 2 ? "59" : "3A"));
+    g.addColorStop(.5, col + "1C");
+    g.addColorStop(1, col + "00");
+    c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+  const leak = c.createLinearGradient(w * .08, 0, w * .92, h * .62);
+  leak.addColorStop(0, p.acc + "00"); leak.addColorStop(.44, p.acc + "1E"); leak.addColorStop(.92, p.acc + "00");
+  c.fillStyle = leak; c.fillRect(0, 0, w, h);
+
+  c.globalCompositeOperation = "source-over";
+  const vg = c.createRadialGradient(w / 2, h * .36, h * .12, w / 2, h * .52, h * .96);
+  vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(.7, "rgba(0,0,0,.12)"); vg.addColorStop(1, "rgba(0,0,0,.48)");
+  c.fillStyle = vg; c.fillRect(0, 0, w, h);
+}
+function paintAll(root){
+  $$("canvas[data-art]", root || document).forEach((cv, i) => {
+    const pal = parseInt(cv.dataset.pal || "0", 10);
+    paintArt(cv, isNaN(pal) ? 0 : pal, parseInt(cv.dataset.seed || (i + 3), 10));
+  });
+}
+
+/* ---------- cartões ---------- */
+function bookCard(b, opt){
+  const o = opt || {}, st = STATE[b.id];
+  const pct = (o.prog && st && st.prog > 0 && st.prog < 1) ? ", " + Math.round(st.prog * 100) + " por cento lido" : "";
+  return '<button class="book-card" type="button" data-book="' + b.id + '" ' +
+    'aria-label="' + esc(b.t) + ', ' + esc(b.a) + pct + '. Abrir ficha do livro.">' +
+    coverHTML(b, o) + '</button>';
+}
+function resumeCard(b){ return bookCard(b, { prog:true }); }
+function collectionCard(cl){
+  const p = PAL[cl.pal];
+  const bg = 'background:' +
+    'linear-gradient(to top, rgba(0,0,0,.70) 0%, rgba(0,0,0,0) 64%),' +
+    'radial-gradient(90% 130% at 84% 8%, ' + p.acc + '55 0%, rgba(0,0,0,0) 62%),' +
+    'linear-gradient(140deg, ' + p.g[0] + ', ' + p.g[1] + ')';
+  return '<button class="collection-card" type="button" data-collection="' + cl.id + '" aria-label="Coleção ' + esc(cl.n) + ', ' + esc(cl.c) + '">' +
+    '<span class="collection-art sq" style="' + bg + '">' +
+      '<span class="cl-name">' + esc(cl.n) + '</span><span class="cl-count">' + esc(cl.c) + '</span>' +
+    '</span></button>';
+}
+function shelf(title, sub, inner){
+  return '<section class="shelf"><div class="shelf-head">' +
+    '<button class="shelf-title" type="button" data-act="seeall" data-name="' + esc(title) + '">' +
+      '<h2>' + esc(title) + '</h2>' +
+      '<svg width="20" height="20" aria-hidden="true"><use href="#i-chev-r"/></svg>' +
+    '</button>' + (sub ? '<p class="shelf-sub">' + esc(sub) + '</p>' : "") +
+    '</div><div class="rail">' + inner + '</div></section>';
+}
+
+/* ---------- billboard ---------- */
+const SLIDES = [
+  { id:"casmurro", kicker:"CONTINUAR", brand:false,
+    title:"Dom Casmurro", meta:"Capítulo IX &middot; 34% lido &middot; 3 h 26 min restantes",
+    cta:"Continuar lendo", act:"read" },
+  { id:"machado", kicker:"COLEÇÃO", brand:true,
+    title:"Machado, do começo ao fim", meta:"Nove romances e contos em edição revista, com ensaios de apresentação.",
+    cta:"Ver coleção", act:"collection" },
+  { id:"sertoes", kicker:"NOVO EM", brand:true,
+    title:"Os Sertões", meta:"Edição anotada com mapas de Canudos e notas de campo de Euclides da Cunha.",
+    cta:"Ler amostra", act:"detail" }
+];
+function renderBillboard(){
+  const track = $("#bb-track"), dots = $("#bb-dots");
+  track.innerHTML = SLIDES.map((s, i) => {
+    const b = byId(s.id);
+    const pal = b ? b.pal : (COLLECTIONS.find(c => c.id === s.id) || { pal:0 }).pal;
+    return '<article class="bb-slide" role="group" aria-roledescription="slide" aria-label="' + (i + 1) + ' de ' + SLIDES.length + ': ' + esc(s.title) + '">' +
+      '<div class="bb-card sq">' + keyArt(pal) +
+      '<div class="bb-scrim" aria-hidden="true"></div>' +
+      '<div class="bb-body">' +
+        '<p class="bb-kicker">' + esc(s.kicker) + (s.brand ? ' <span class="bb-brand">folio+</span>' : "") + '</p>' +
+        '<h2 class="bb-title">' + esc(s.title) + '</h2>' +
+        '<p class="bb-meta">' + s.meta + '</p>' +
+        '<div class="bb-actions">' +
+          '<button class="btn btn-prominent" type="button" data-slide-act="' + s.act + '" data-target="' + s.id + '">' +
+            (s.act === "read" ? '<svg width="15" height="15" aria-hidden="true"><use href="#i-play"/></svg>' : "") + esc(s.cta) + '</button>' +
+          '<button class="btn btn-icon" type="button" data-act="add" data-book="' + (byId(s.id) ? s.id : "") + '" aria-label="Adicionar à biblioteca">' +
+            '<svg width="20" height="20" aria-hidden="true"><use href="#i-plus"/></svg></button>' +
+        '</div>' +
+      '</div></div></article>';
+  }).join("");
+  dots.innerHTML = SLIDES.map((s, i) =>
+    '<button class="bb-dot-hit" type="button" role="tab" aria-current="' + (i === 0) + '" aria-label="Destaque ' + (i + 1) + ': ' + esc(s.title) + '" data-dot="' + i + '"><span class="bb-dot"></span></button>'
+  ).join("");
+}
+function bbSync(){
+  const track = $("#bb-track");
+  const i = Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+  $$("#bb-dots .bb-dot-hit").forEach((d, n) => d.setAttribute("aria-current", String(n === i)));
+}
+
+/* ---------- prateleiras ---------- */
+function renderNow(){
+  const reading = Object.keys(STATE).filter(k => STATE[k].shelf === "lendo")
+    .sort((a, b) => STATE[b].prog - STATE[a].prog).map(byId);
+  const gratis  = BOOKS.filter(b => !b.plus).slice(0, 10);
+  const lanc    = ["sertoes","maias","comedia","dalloway","frankenstein","taverna","espumas","dorian"].map(byId);
+  const grandes = ["brascubas","crime","moby","orgulho","cortico","macunaima","vidassecas","quaresma"].map(byId);
+  const plusIds = BOOKS.filter(b => b.plus).slice(0, 10);
+  const because = ["quincas","helena","saobernardo","quaresma","ateneu","sargento"].map(byId);
+  const audio   = BOOKS.filter(b => b.narr).slice(0, 8);
+
+  $("#now-shelves").innerHTML =
+    shelf("Continuar lendo", null, reading.map(resumeCard).join("")) +
+    shelf("Leia de graça", null, gratis.map(b => bookCard(b)).join("")) +
+    shelf("Últimos lançamentos", null, lanc.map(b => bookCard(b)).join("")) +
+    shelf("Grandes clássicos agora no Folio", null, grandes.map(b => bookCard(b)).join("")) +
+    shelf("Incluídos no Folio+", "Sem custo adicional na sua assinatura", plusIds.map(b => bookCard(b)).join("")) +
+    shelf("Coleções", null, COLLECTIONS.map(collectionCard).join("")) +
+    shelf("Porque você leu O Alienista", null, because.map(b => bookCard(b)).join("")) +
+    shelf("Com narração", null, audio.map(b => bookCard(b)).join(""));
+}
+function renderPlus(){
+  const orig = BOOKS.filter(b => b.plus);
+  $("#plus-shelves").innerHTML =
+    shelf("Destaques do Folio+", null, orig.slice(0, 8).map(b => bookCard(b)).join("")) +
+    shelf("Coleções exclusivas", null, COLLECTIONS.slice(0, 4).map(collectionCard).join("")) +
+    shelf("Narrados por vozes brasileiras", null, BOOKS.filter(b => b.narr && b.plus).map(b => bookCard(b)).join(""));
+  $("#plus-legal").innerHTML =
+    "O valor é cobrado na sua conta ao confirmar a compra. A assinatura renova automaticamente por R$ 19,90/mês, " +
+    "a menos que seja cancelada com no mínimo 24 horas de antecedência. Gerencie ou cancele em Ajustes › Sua conta › Assinaturas. " +
+    "Ao assinar durante um período gratuito, a parte não utilizada é perdida. Assinatura válida em todos os seus dispositivos. " +
+    "Compras avulsas usam o pagamento da App Store, ficam vinculadas à sua conta e podem ser restauradas a qualquer momento, em qualquer dispositivo.";
+}
+
+/* ---------- busca ---------- */
+const RECENTS = ["Machado de Assis", "romance realista", "vidas secas", "poesia brasileira"];
+function renderSearch(q){
+  const body = $("#search-body");
+  const term = (q || "").trim().toLowerCase();
+  const hits = term
+    ? BOOKS.filter(b => (b.t + " " + b.a + " " + b.g).toLowerCase().indexOf(term) > -1)
+    : BOOKS;
+  if (!hits.length){
+    body.innerHTML = '<div class="empty"><b>Nenhum resultado</b><p>Não encontramos nada para “' + esc(q) +
+      '”. Verifique a grafia ou procure pelo nome do autor.</p></div>';
+    return;
+  }
+  body.innerHTML = '<h3 class="vh">' + hits.length + (hits.length === 1 ? ' título' : ' títulos') + '</h3>' +
+    '<div class="poster-grid">' + hits.map(b => bookCard(b, { prog:true })).join("") + '</div>';
+}
+
+/* ---------- biblioteca ---------- */
+function renderLib(seg){
+  const ids = Object.keys(STATE).filter(k => seg === "off" ? STATE[k].off : STATE[k].shelf === seg);
+  const body = $("#lib-body");
+  if (!ids.length){
+    body.innerHTML = '<div class="empty"><b>Nada por aqui ainda</b><p>Os livros que você adicionar aparecem nesta aba, disponíveis em todos os seus dispositivos.</p></div>';
+    return;
+  }
+  body.innerHTML = '<div class="poster-grid">' +
+    ids.map(id => bookCard(byId(id), { prog:true })).join("") + '</div>';
+}
+
+/* ---------- ficha do livro ---------- */
+function openDetail(id){
+  const b = byId(id); if (!b) return;
+  const st = STATE[id] || { prog:0, off:false, shelf:null };
+  const inLib = !!STATE[id];
+  const chs = CHAPTERS[id];
+  const stars = Math.round(b.rate);
+
+  $("#detail-navtitle").textContent = b.t;
+  $("#detail-body").innerHTML =
+    '<div class="detail-hero">' +
+      '<div class="detail-bgart" aria-hidden="true">' + keyArt(b.pal) + '</div>' +
+      '<div class="detail-bgscrim" aria-hidden="true"></div>' +
+      '<div class="detail-inner">' +
+        coverHTML(b) +
+        '<h2 class="detail-title" id="detail-title">' + esc(b.t) + '</h2>' +
+        '<p class="detail-author">' + esc(b.a) + '</p>' +
+        '<p class="detail-facts">' +
+          (b.plus ? '<span class="badge is-plus">folio+</span>' : '<span class="badge">R$ 9,90</span>') +
+          '<span>' + b.y + '</span><span aria-hidden="true">&middot;</span><span>' + esc(b.g) + '</span>' +
+          '<span aria-hidden="true">&middot;</span><span>' + b.pages + ' páginas</span>' +
+          '<span aria-hidden="true">&middot;</span><span>' + hhmm(b.mins) + '</span>' +
+        '</p>' +
+        '<div class="detail-actions">' +
+          '<button class="btn btn-prominent" type="button" data-act="read" data-book="' + id + '">' +
+            '<svg width="15" height="15" aria-hidden="true"><use href="#i-play"/></svg>' +
+            (st.prog > 0 && st.prog < 1 ? "Continuar" : b.plus ? "Ler agora" : "Ler amostra") + '</button>' +
+          (b.plus ? "" : '<button class="btn btn-gray" type="button" data-act="buy" data-book="' + id + '">Comprar R$ 9,90</button>') +
+        '</div>' +
+        (st.prog > 0 && st.prog < 1 ?
+          '<div style="width:100%;max-width:340px"><div class="progress"><i style="width:' + Math.round(st.prog * 100) + '%"></i></div>' +
+          '<p style="font:var(--f-caption1);letter-spacing:var(--tr-caption1);color:var(--label-2);margin-top:6px">' +
+          esc(st.ch) + ' &middot; ' + hhmm(st.left) + ' restantes</p></div>' : "") +
+        '<div class="icon-row">' +
+          '<button class="icon-action" type="button" data-act="add" data-book="' + id + '" aria-pressed="' + inLib + '">' +
+            '<svg width="24" height="24" aria-hidden="true"><use href="#' + (inLib ? "i-check" : "i-plus") + '"/></svg>' +
+            '<span>' + (inLib ? "Na biblioteca" : "Adicionar") + '</span></button>' +
+          '<button class="icon-action" type="button" data-act="download" data-book="' + id + '" aria-pressed="' + !!st.off + '">' +
+            '<svg width="24" height="24" aria-hidden="true"><use href="#' + (st.off ? "i-downloaded" : "i-download") + '"/></svg>' +
+            '<span>' + (st.off ? "Baixado" : "Baixar") + '</span></button>' +
+          (b.narr ? '<button class="icon-action" type="button" data-act="listen" data-book="' + id + '">' +
+            '<svg width="24" height="24" aria-hidden="true"><use href="#i-headphones"/></svg><span>Ouvir</span></button>' : "") +
+          '<button class="icon-action" type="button" data-act="share" data-book="' + id + '">' +
+            '<svg width="24" height="24" aria-hidden="true"><use href="#i-share"/></svg><span>Compartilhar</span></button>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<section class="section"><div class="prose clamped" id="desc"><p>' + esc(b.d) + '</p></div>' +
+      '<button class="more-link" type="button" data-act="expand" aria-expanded="false">mais</button></section>' +
+
+    '<section class="section"><h3>Avaliações</h3>' +
+      '<div class="list"><div class="list-row">' +
+        '<span style="font:var(--f-title1);letter-spacing:var(--tr-title1);font-variant-numeric:tabular-nums">' + b.rate.toFixed(1) + '</span>' +
+        '<span><span aria-hidden="true">' +
+          [1,2,3,4,5].map(n => '<svg width="13" height="13" style="color:' + (n <= stars ? "var(--sys-orange)" : "var(--label-4)") + '"><use href="#i-star"/></svg>').join("") +
+        '</span><br><small style="font:var(--f-caption1);letter-spacing:var(--tr-caption1);color:var(--label-2)">' +
+        b.rate.toFixed(1) + ' de 5 &middot; ' + (900 + (b.y % 700)) + ' avaliações</small></span>' +
+        '<button class="btn btn-sm btn-tinted" style="margin-left:auto" type="button" data-act="rate">Avaliar</button>' +
+      '</div>' +
+      '<button class="list-row" type="button" data-act="report"><span>Denunciar um problema</span>' +
+        '<svg class="chev" width="14" height="14" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>' +
+      '</div></section>' +
+
+    (chs ? '<section class="section"><h3>Sumário</h3><div class="list">' +
+      chs.slice(0, 6).map((c, i) => '<button class="list-row toc-row" type="button" data-read-ch="' + i + '" data-book="' + id + '" data-read="' + c.read + '">' +
+        '<span class="toc-n">' + c.n + '</span><span class="toc-t">' + esc(c.t) + '</span>' +
+        '<span class="toc-len">' + (6 + (i * 3) % 11) + ' min</span></button>').join("") +
+      '</div><p class="list-note">' + chs.length + ' capítulos nesta edição.</p></section>' : "") +
+
+    '<section class="section"><h3>Informações</h3><div class="list">' +
+      '<div class="list-row"><span>Editora</span><span class="lr-value">Folio Edições</span></div>' +
+      '<div class="list-row"><span>Publicado em</span><span class="lr-value">' + b.y + '</span></div>' +
+      '<div class="list-row"><span>Idioma</span><span class="lr-value">Português</span></div>' +
+      '<div class="list-row"><span>Tamanho</span><span class="lr-value">' + (1.2 + (b.pages / 260)).toFixed(1) + ' MB</span></div>' +
+      '<div class="list-row"><span>Direitos</span><span class="lr-value">Domínio público</span></div>' +
+      '<div class="list-row"><span>Acessibilidade</span><span class="lr-value">VoiceOver, Dynamic Type</span></div>' +
+    '</div><p class="list-note">Obra em domínio público no Brasil (Lei 9.610/98, art. 41). Texto revisto pela equipe editorial do Folio a partir da edição de ' + b.y + '.</p></section>' +
+
+    shelf("Leitores também leram", null,
+      BOOKS.filter(x => x.g === b.g && x.id !== b.id).concat(BOOKS.filter(x => x.a === b.a && x.id !== b.id))
+        .filter((v, i, arr) => arr.indexOf(v) === i).slice(0, 8).map(x => bookCard(x)).join(""), false);
+
+  paintAll($("#detail-body"));
+  openLayer("layer-detail");
+  $("#detail-scroller").scrollTop = 0;
+  $("#nav-detail").classList.remove("is-solid");
+}
+
+/* ---------- leitor ---------- */
+let rdPage = 0, rdPages = 1;
+function openReader(id, chIdx){
+  const b = byId(id); if (!b) return;
+  $("#reader-navtitle").textContent = b.t;
+  const chs = CHAPTERS[id];
+  let html = "";
+  if (chs){
+    const list = chs.filter(c => c.p);
+    const start = typeof chIdx === "number" ? Math.min(chIdx, list.length - 1) : 0;
+    html = list.slice(start).map(c =>
+      '<h4><span class="ch-num">Capítulo ' + c.n + '</span>' + esc(c.t) + '</h4>' +
+      c.p.map((t, i) => '<p class="' + (i === 0 ? "first" : (t.indexOf("—") === 0 ? "dlg" : "")) + '">' + esc(t) + '</p>').join("")
+    ).join("");
+  } else {
+    html = '<h4><span class="ch-num">Amostra</span>' + esc(b.t) + '</h4>' +
+      (b.open || []).map((t, i) => '<p class="' + (i === 0 ? "first" : "") + '">' + esc(t) + '</p>').join("") +
+      '<p style="text-indent:0;margin-top:1.4em;padding-top:1.2em;border-top:1px solid currentColor;opacity:.55;font-size:.8em;font-family:var(--ui);text-align:left">' +
+      'Fim da amostra. ' + (b.plus ? "Este título está incluído no Folio+." : "Compre por R$ 9,90 para ler na íntegra.") + '</p>';
+  }
+  $("#reader-col").innerHTML = html;
+  applyReaderPrefs();
+  openLayer("layer-reader");
+  requestAnimationFrame(() => { rdPage = 0; measureReader(); });
+}
+function measureReader(){
+  const col = $("#reader-col"), page = $("#reader-page");
+  if (!col || !page) return;
+  const w = col.clientWidth, gap = 44;
+  rdPages = Math.max(1, Math.round((col.scrollWidth + gap) / (w + gap)));
+  goPage(Math.min(rdPage, rdPages - 1));
+}
+function goPage(i){
+  const col = $("#reader-col");
+  rdPage = Math.max(0, Math.min(i, rdPages - 1));
+  const w = col.clientWidth, gap = 44;
+  col.style.transform = "translate3d(" + (-rdPage * (w + gap)) + "px,0,0)";
+  $("#reader-pos").textContent = "Página " + (rdPage + 1) + " de " + rdPages;
+  const perPage = 3;
+  $("#reader-left").textContent = Math.max(0, (rdPages - rdPage - 1) * perPage) + " min restantes no capítulo";
+}
+function applyReaderPrefs(){
+  const L = $("#layer-reader");
+  L.dataset.rtheme = readerPrefs.theme;
+  const col = $("#reader-col");
+  col.style.setProperty("--rd-size", readerPrefs.size);
+  const f = FONTS.find(x => x.id === readerPrefs.font);
+  col.style.setProperty("--rd-font", f ? f.css : "var(--serif)");
+  col.style.columnWidth = readerPrefs.scroll ? "auto" : "100%";
+  $("#rd-size-note").textContent = "Corpo de " + readerPrefs.size + " pt. Também acompanha o Tamanho do Texto do sistema.";
+  $$("#rd-themes .theme-swatch").forEach(s => s.setAttribute("aria-pressed", String(s.dataset.rtheme === readerPrefs.theme)));
+  $("#rd-scroll").setAttribute("aria-checked", String(readerPrefs.scroll));
+  $$("#rd-scroll .switch, #rd-auto .switch").forEach(sw =>
+    sw.setAttribute("aria-checked", sw.parentElement.getAttribute("aria-checked")));
+}
+function renderFontList(){
+  $("#rd-fonts").innerHTML = FONTS.map(f =>
+    '<button class="list-row" type="button" data-font="' + f.id + '" aria-pressed="' + (f.id === readerPrefs.font) + '">' +
+    '<span style="font-family:' + f.css + '">' + esc(f.n) + '</span>' +
+    (f.id === readerPrefs.font ? '<svg class="check" width="18" height="18" aria-hidden="true"><use href="#i-check"/></svg>' : "") +
+    '</button>').join("");
+}
+function renderTOC(){
+  const chs = CHAPTERS.casmurro;
+  $("#toc-list").innerHTML = chs.map((c, i) =>
+    '<button class="list-row toc-row" type="button" data-read-ch="' + i + '" data-book="casmurro" data-read="' + c.read + '"' +
+    (c.cur ? ' aria-current="true"' : "") + '>' +
+    '<span class="toc-n">' + c.n + '</span><span class="toc-t">' + esc(c.t) + '</span>' +
+    (c.cur ? '<svg class="check" width="16" height="16" aria-hidden="true"><use href="#i-bookmark-fill"/></svg>' :
+      '<span class="toc-len">' + (6 + (i * 3) % 11) + ' min</span>') + '</button>').join("");
+}
+
+/* ---------- camadas e folhas ---------- */
+function openLayer(id){
+  const L = document.getElementById(id);
+  lastFocus = document.activeElement;
+  L.setAttribute("aria-hidden", "false");
+  L.classList.add("is-open");
+  const f = L.querySelector("button, [href], input");
+  if (f) setTimeout(() => f.focus({ preventScroll:true }), REDUCED.matches ? 0 : 340);
+}
+function closeLayer(id){
+  const L = document.getElementById(id);
+  L.classList.remove("is-open");
+  L.setAttribute("aria-hidden", "true");
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll:true });
+}
+function openSheet(id){
+  const s = document.getElementById(id); if (!s) return;
+  lastFocus = document.activeElement;
+  $("#scrim").hidden = false;
+  requestAnimationFrame(() => { $("#scrim").classList.add("is-open"); s.classList.add("is-open"); });
+  s.setAttribute("aria-hidden", "false");
+  const f = s.querySelector("button");
+  if (f) setTimeout(() => f.focus({ preventScroll:true }), REDUCED.matches ? 0 : 300);
+}
+function closeSheets(){
+  $$(".sheet.is-open").forEach(s => { s.classList.remove("is-open"); s.setAttribute("aria-hidden", "true"); });
+  $("#scrim").classList.remove("is-open");
+  setTimeout(() => { $("#scrim").hidden = true; }, 320);
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll:true });
+}
+
+/* ---------- abas ---------- */
+const TAB_GLYPH = { now:["i-book","i-book-fill"], lib:["i-books","i-books-fill"] };
+function selectTab(name){
+  $$(".tab").forEach(t => {
+    const on = t.dataset.tab === name;
+    t.setAttribute("aria-selected", String(on));
+    const map = TAB_GLYPH[t.dataset.tab];
+    const use = t.querySelector("use");
+    if (map && use) use.setAttribute("href", "#" + (on ? map[1] : map[0]));
+  });
+  $$(".screen").forEach(s => s.classList.toggle("is-active", s.id === "scr-" + name));
+  const scr = $("#scr-" + name);
+  if (scr) scr.focus({ preventScroll:true });
+  if (name === "search") setTimeout(() => $("#q").focus({ preventScroll:true }), 60);
+}
+
+/* ---------- Dynamic Type e aparência ---------- */
+const DT_STEPS = [.882, .941, 1, 1.118, 1.235, 1.353, 1.471];
+const DT_NAMES = ["Menor", "Pequeno", "Padrão", "Grande", "Maior", "Extra grande", "Acessibilidade"];
+let dtIndex = 2;
+function applyDT(){
+  dtScale = DT_STEPS[dtIndex];
+  document.documentElement.style.setProperty("--dt", dtScale);
+  $("#dt-value").textContent = DT_NAMES[dtIndex];
+  requestAnimationFrame(measureReader);
+}
+function applyAppearance(mode){
+  if (mode === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme", mode);
+  $$("#appearance .seg").forEach(s => s.setAttribute("aria-selected", String(s.dataset.appear === mode)));
+  const dark = mode === "dark" || (mode === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const tc = document.querySelector('meta[name="theme-color"]');
+  if (tc) tc.setAttribute("content", dark ? "#000000" : "#F2F2F7");
+  if (readerPrefs.autoTheme){
+    readerPrefs.theme = dark ? "night" : "quiet";
+    applyReaderPrefs();
+  }
+  requestAnimationFrame(() => paintAll());
+}
+
+/* ============================================================
+   Eventos
+   ============================================================ */
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("[data-tab],[data-book],[data-collection],[data-act],[data-sheet],[data-close],[data-close-sheet],[data-slide-act],[data-dot],[data-recent],[data-seg],[data-appear],[data-rtheme],[data-font],[data-read-ch],[data-page]");
+  if (!t) return;
+  const d = t.dataset;
+
+  if (d.tab)          { selectTab(d.tab); return; }
+  if (d.sheet)        { openSheet(d.sheet); return; }
+  if (t.hasAttribute("data-close-sheet")) { closeSheets(); return; }
+  if (d.close)        { closeLayer(d.close); return; }
+  if (d.dot != null)  { const tr = $("#bb-track"); tr.scrollTo({ left: +d.dot * tr.clientWidth, behavior: REDUCED.matches ? "auto" : "smooth" }); return; }
+  if (d.recent)       { $("#q").value = d.recent; renderSearch(d.recent); $("#q-clear").hidden = false; $("#q-cancel").hidden = false; return; }
+  if (d.seg)          { $$("#lib-seg .seg").forEach(s => s.setAttribute("aria-selected", String(s === t))); renderLib(d.seg); return; }
+  if (d.appear)       { applyAppearance(d.appear); return; }
+  if (d.rtheme)       { readerPrefs.theme = d.rtheme; readerPrefs.autoTheme = false; $("#rd-auto").setAttribute("aria-checked","false"); applyReaderPrefs(); return; }
+  if (d.font)         { readerPrefs.font = d.font; renderFontList(); applyReaderPrefs(); requestAnimationFrame(measureReader); return; }
+  if (d.readCh != null){ closeSheets(); openReader(d.book || "casmurro", +d.readCh); return; }
+  if (d.page != null) {
+    const n = +d.page;
+    if (n === 0) $("#layer-reader").classList.toggle("is-immersive");
+    else goPage(rdPage + n);
+    return;
+  }
+  if (d.slideAct){
+    if (d.slideAct === "read") openReader(d.target);
+    else if (d.slideAct === "detail") openDetail(d.target);
+    else { const c = COLLECTIONS.find(x => x.id === d.target); toast("Coleção “" + c.n + "” — " + c.c); }
+    return;
+  }
+  if (d.collection){
+    const c = COLLECTIONS.find(x => x.id === d.collection);
+    if (c) openDetail(c.ids[0]);
+    return;
+  }
+
+  switch (d.act){
+    case "read":     openReader(d.book); return;
+    case "expand": {
+      const p = $("#desc"), on = t.getAttribute("aria-expanded") === "true";
+      p.classList.toggle("clamped", on); t.setAttribute("aria-expanded", String(!on));
+      t.textContent = on ? "mais" : "menos"; return;
+    }
+    case "add": {
+      if (!d.book) { toast("Adicionado à biblioteca"); return; }
+      if (STATE[d.book]) { delete STATE[d.book]; toast("Removido da biblioteca"); }
+      else { const b = byId(d.book); STATE[d.book] = { prog:0, ch:"", left:b.mins, shelf:"quero", off:false }; toast("Adicionado a Quero ler"); }
+      openDetail(d.book); renderLib($("#lib-seg .seg[aria-selected=true]").dataset.seg); return;
+    }
+    case "download": {
+      const st = STATE[d.book]; if (!st) { toast("Adicione à biblioteca para baixar"); return; }
+      st.off = !st.off; toast(st.off ? "Baixado para leitura offline" : "Download removido");
+      openDetail(d.book); return;
+    }
+    case "buy":      toast("Compra pela App Store — R$ 9,90"); return;
+    case "subscribe":toast("Teste grátis de 7 dias iniciado"); return;
+    case "restore":  toast("Compras restauradas"); return;
+    case "manage":   toast("Abrindo Ajustes › Assinaturas"); return;
+    case "listen":   toast("Narração disponível no Folio+"); return;
+    case "share":    toast("Compartilhar link do livro"); return;
+    case "rate":     toast("Avaliar este livro"); return;
+    case "report":   toast("Formulário de denúncia enviado ao suporte"); return;
+    case "privacy":  toast("Abrindo a política de privacidade"); return;
+    case "export":   toast("Preparando o arquivo com seus dados"); return;
+    case "delete":   toast("Apagar conta pede confirmação por e-mail"); return;
+    case "support":  toast("suporte@folio.app"); return;
+    case "analytics":{
+      const on = t.getAttribute("aria-checked") === "true";
+      t.setAttribute("aria-checked", String(!on));
+      $(".switch", t).setAttribute("aria-checked", String(!on));
+      toast(!on ? "Análises ativadas" : "Análises desativadas"); return;
+    }
+    case "seeall":   toast("Ver tudo: " + d.name); return;
+  }
+});
+
+/* Livro: clique em qualquer cartão */
+document.addEventListener("click", ev => {
+  const c = ev.target.closest("[data-book]");
+  if (!c || c.dataset.act || c.dataset.readCh || c.dataset.slideAct) return;
+  if (c.classList.contains("book-card") || c.classList.contains("rank-card") ||
+      c.classList.contains("result-row") || c.classList.contains("resume-card")) openDetail(c.dataset.book);
+});
+
+/* Barras de navegação que ficam opacas ao rolar */
+$$(".scroller").forEach(sc => {
+  const nav = document.getElementById(sc.dataset.nav);
+  const from = +(sc.dataset.navFrom || 30);
+  if (!nav) return;
+  sc.addEventListener("scroll", () => nav.classList.toggle("is-solid", sc.scrollTop > from), { passive:true });
+});
+
+/* Carrossel */
+let bbTimer = null;
+function bbAuto(){
+  clearInterval(bbTimer);
+  if (REDUCED.matches) return;
+  bbTimer = setInterval(() => {
+    const tr = $("#bb-track");
+    if (!$("#scr-now").classList.contains("is-active") || document.hidden) return;
+    if ($(".stack-layer.is-open")) return;
+    const i = (Math.round(tr.scrollLeft / tr.clientWidth) + 1) % SLIDES.length;
+    tr.scrollTo({ left: i * tr.clientWidth, behavior:"smooth" });
+  }, 7000);
+}
+
+/* Busca */
+$("#q").addEventListener("input", e => {
+  const v = e.target.value;
+  $("#q-clear").hidden = !v; $("#q-cancel").hidden = !v;
+  renderSearch(v);
+});
+$("#q-clear").addEventListener("click", () => {
+  $("#q").value = ""; $("#q-clear").hidden = true; renderSearch(""); $("#q").focus();
+});
+$("#q-cancel").addEventListener("click", () => {
+  $("#q").value = ""; $("#q-clear").hidden = true; $("#q-cancel").hidden = true; renderSearch(""); $("#q").blur();
+});
+
+/* Controles do leitor */
+$("#rd-smaller").addEventListener("click", () => { readerPrefs.size = Math.max(14, readerPrefs.size - 1); applyReaderPrefs(); requestAnimationFrame(measureReader); });
+$("#rd-bigger").addEventListener("click",  () => { readerPrefs.size = Math.min(30, readerPrefs.size + 1); applyReaderPrefs(); requestAnimationFrame(measureReader); });
+$("#rd-scroll").addEventListener("click",  function(){ readerPrefs.scroll = this.getAttribute("aria-checked") !== "true"; this.setAttribute("aria-checked", String(readerPrefs.scroll)); applyReaderPrefs(); requestAnimationFrame(measureReader); });
+$("#rd-auto").addEventListener("click",    function(){ readerPrefs.autoTheme = this.getAttribute("aria-checked") !== "true"; this.setAttribute("aria-checked", String(readerPrefs.autoTheme)); $(".switch", this).setAttribute("aria-checked", String(readerPrefs.autoTheme)); if (readerPrefs.autoTheme) applyAppearance($("#appearance .seg[aria-selected=true]").dataset.appear); });
+$("#dt-smaller").addEventListener("click", () => { dtIndex = Math.max(0, dtIndex - 1); applyDT(); });
+$("#dt-bigger").addEventListener("click",  () => { dtIndex = Math.min(DT_STEPS.length - 1, dtIndex + 1); applyDT(); });
+$("#dt-reset").addEventListener("click",   () => { dtIndex = 2; applyDT(); });
+$("#scrim").addEventListener("click", closeSheets);
+
+/* Teclado: Esc, setas no leitor, setas no carrossel */
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape"){
+    if ($(".sheet.is-open")) { closeSheets(); return; }
+    const L = $(".stack-layer.is-open");
+    if (L) closeLayer(L.id);
+    return;
+  }
+  if ($("#layer-reader").classList.contains("is-open") && !$(".sheet.is-open")){
+    if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goPage(rdPage + 1); }
+    if (e.key === "ArrowLeft"  || e.key === "PageUp")                    { e.preventDefault(); goPage(rdPage - 1); }
+  }
+});
+
+/* Swipe no leitor */
+(function(){
+  const p = $("#reader-page"); let x0 = null;
+  p.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive:true });
+  p.addEventListener("touchend", e => {
+    if (x0 == null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 42) goPage(rdPage + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive:true });
+})();
+
+let rz; window.addEventListener("resize", () => {
+  clearTimeout(rz); rz = setTimeout(() => { paintAll(); measureReader(); }, 180);
+});
+$("#bb-track").addEventListener("scroll", bbSync, { passive:true });
+REDUCED.addEventListener("change", bbAuto);
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+  const m = $("#appearance .seg[aria-selected=true]");
+  if (m && m.dataset.appear === "auto") applyAppearance("auto");
+});
+
+/* ---------- boot ---------- */
+renderBillboard();
+renderNow();
+renderPlus();
+renderSearch("");
+renderLib("lendo");
+renderFontList();
+renderTOC();
+applyAppearance("dark");
+applyDT();
+applyReaderPrefs();
+requestAnimationFrame(() => { paintAll(); bbAuto(); });
+window.addEventListener("load", () => { paintAll(); });
+
+if ("serviceWorker" in navigator && location.protocol !== "blob:" && location.protocol.indexOf("http") === 0){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+
+</script>
+</body>
+</html>
