@@ -5,13 +5,16 @@
    - fontes (Google Fonts): cache-first, cache separado e de longa duração
    Nada é enviado a terceiros. Nenhum dado do leitor sai do dispositivo. */
 
-const VERSION = "folio-v1";
+const VERSION = "folio-v2";
 const SHELL = VERSION + "-shell";
 const FONTS = VERSION + "-fonts";
 
 const SHELL_URLS = [
   "./",
   "./index.html",
+  "./styles.css",
+  "./data.js",
+  "./app.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./icons/icon-180.png",
