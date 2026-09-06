@@ -5,17 +5,17 @@
    dialog would stay one scrollbar short of the viewport width. */
 html:has(#reader-dialog[open]) { overflow: hidden; scrollbar-gutter: auto; }
 #reader-dialog {
-  --fr-paper: #f5f2e9;
-  --fr-surface: #eeeae0;
-  --fr-ink: #292f27;
-  --fr-muted: #656b5e;
-  --fr-line: #d9dccf;
-  --fr-accent: #365b31;
+  --fr-paper: #FAF7F0;
+  --fr-surface: #F1EDE3;
+  --fr-ink: #1C1C1E;
+  --fr-muted: rgba(60,60,67,.60);
+  --fr-line: rgba(60,60,67,.20);
+  --fr-accent: #007AFF;
   --fr-accent-ink: #fff;
-  --fr-mark: #f0da8d;
+  --fr-mark: #FFD60A;
   --fr-font-size: 20px;
   --fr-line-height: 1.8;
-  --fr-reading-font: "Iowan Old Style", Baskerville, "Palatino Linotype", Georgia, serif;
+  --fr-reading-font: "New York", "Iowan Old Style", Charter, Palatino, Georgia, serif;
   color-scheme: light;
   position: fixed;
   inset: 0;
@@ -34,13 +34,13 @@ html:has(#reader-dialog[open]) { overflow: hidden; scrollbar-gutter: auto; }
   font: 14px/1.5 var(--ui, system-ui, sans-serif);
   z-index: 100;
 }
-#reader-dialog[data-theme=white] { --fr-paper: #fff; --fr-surface: #f5f6f2; --fr-ink: #232821; --fr-muted: #61685a; --fr-line: #dee2d8; }
-#reader-dialog[data-theme=sepia] { --fr-paper: #eee0c4; --fr-surface: #e5d4b0; --fr-ink: #453620; --fr-muted: #6f5a3a; --fr-line: #c9b68f; --fr-accent: #53613a; --fr-mark: #dfc46d; }
-#reader-dialog[data-theme=night] { --fr-paper: #141813; --fr-surface: #20261d; --fr-ink: #dce0d2; --fr-muted: #a7b09b; --fr-line: #343d2e; --fr-accent: #cce0a7; --fr-accent-ink: #26361a; --fr-mark: #6b5a20; color-scheme: dark; }
-#reader-dialog[data-font=sans] { --fr-reading-font: system-ui, -apple-system, "Segoe UI", sans-serif; }
+#reader-dialog[data-theme=white] { --fr-paper: #FFFFFF; --fr-surface: #F2F2F7; --fr-ink: #000000; --fr-muted: rgba(60,60,67,.60); --fr-line: rgba(60,60,67,.29); }
+#reader-dialog[data-theme=sepia] { --fr-paper: #F2E5CC; --fr-surface: #E9DBBE; --fr-ink: #3A2E1C; --fr-muted: rgba(58,46,28,.62); --fr-line: rgba(58,46,28,.22); --fr-accent: #A2845E; --fr-mark: #E6C55C; }
+#reader-dialog[data-theme=night] { --fr-paper: #000000; --fr-surface: #1C1C1E; --fr-ink: rgba(235,235,245,.86); --fr-muted: rgba(235,235,245,.45); --fr-line: rgba(84,84,88,.65); --fr-accent: #0A84FF; --fr-accent-ink: #FFFFFF; --fr-mark: #7A5F00; color-scheme: dark; }
+#reader-dialog[data-font=sans] { --fr-reading-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, "Segoe UI", sans-serif; }
 #reader-dialog[data-font=dyslexic] { --fr-reading-font: Verdana, Tahoma, sans-serif; }
 #reader-dialog[data-font=mono] { --fr-reading-font: "Cascadia Mono", Consolas, monospace; }
-#reader-dialog::backdrop { background: #111b11cc; }
+#reader-dialog::backdrop { background: rgba(0,0,0,.55); }
 #reader-dialog *, #reader-dialog *::before, #reader-dialog *::after { box-sizing: border-box; }
 #reader-dialog button, #reader-dialog input, #reader-dialog select, #reader-dialog textarea { font: inherit; color: inherit; }
 #reader-dialog button { border: 0; background: transparent; cursor: pointer; min-height: 44px; }

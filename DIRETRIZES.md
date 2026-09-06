@@ -12,41 +12,43 @@ instalado pelo Safari não passa por App Review, então não existe "aprovação
 nesse formato. O projeto cumpre as regras como se fosse submetido, para que um
 empacotamento futuro (WKWebView/Capacitor) não precise ser reescrito.
 
-### ⚠️ O sistema visual da Apple foi abandonado na reescrita
+### Histórico do sistema visual
 
-O pedido original era seguir **estritamente** as cores e a tipografia da Apple,
-no estilo do app Apple TV. A versão até o commit `68ca780` fazia isso: os 12
-System Colors e 6 System Grays nos valores oficiais, os 11 Text Styles do iOS
-com tamanho, entrelinha e *tracking* oficiais, materiais translúcidos.
+A reescrita que trouxe importação de EPUB, IndexedDB e anotações havia
+substituído a paleta da Apple por um sistema próprio verde-oliva. **Isso foi
+revertido**: o sistema da Apple está de volta, agora sobre a estrutura nova.
 
-A reescrita que trouxe importação de EPUB, IndexedDB e anotações **substituiu
-tudo isso** por um sistema próprio:
-
-| | Antes (`68ca780`) | Agora |
+| | Reescrita (verde-oliva) | Agora |
 |---|---|---|
-| Fundo | `#000000` (systemBackground) | `#111310` (verde-oliva escuro) |
-| Destaque | `#0A84FF` (systemBlue) | `#d4e6a4` / `#345323` |
-| Texto secundário | `rgba(235,235,245,.60)` | `#adb2a4` |
-| Tipografia | Text Styles do iOS com tracking oficial | Inter + Iowan Old Style, escala própria |
-| Vitrine | herói + prateleiras estilo Apple TV | barra lateral + grade editorial |
+| Fundo | `#111310` | `#000000` / `#F2F2F7` (systemBackground) |
+| Destaque | `#d4e6a4` | `#0A84FF` / `#007AFF` (systemBlue) |
+| Texto secundário | `#adb2a4` | `rgba(235,235,245,.60)` (secondaryLabel) |
+| Separador | `#30362c` | `rgba(84,84,88,.65)` (separator) |
+| Erro | `#ffac9d` | `#FF453A` / `#FF3B30` (systemRed) |
+| Tipografia da interface | Iowan Old Style em títulos | SF Pro com o *tracking* oficial dos Text Styles |
+| Chrome | opaco | material translúcido, `saturate(180%) blur(20px)` |
+| Ação primária | pílula verde | pílula branca sobre preto, como no app Apple TV |
+| Aba ativa no celular | só cor | pílula de fundo atrás do ícone |
 
-Isso é uma **decisão de produto, não um bug** — mas contraria o requisito
-original. O CSS antigo está preservado em `work/styles-before.css` e no histórico
-git (`git show 68ca780:styles.css`). Restaurar a paleta Apple sobre a estrutura
-nova é trabalho de reaplicar tokens, não de reescrever o app.
+A troca foi feita **só em `styles.css` e `reader.css`**. Nenhuma linha de
+`app.js`, `storage.js`, `import.js` ou `reader.js` foi tocada, e os 38 testes
+continuam passando — a camada visual é independente da funcional.
 
-**Diretriz 5.2.5** — como efeito colateral, o risco de "confusingly similar to
-an existing Apple product" desapareceu por completo: o app não se parece mais
-com nenhum produto da Apple.
+**Diretriz 5.2.5** — seguir a HIG é exigido; copiar a identidade de um app da
+Apple não é. O que voltou foi o **sistema** (cores, tipografia, materiais,
+componentes). A marca continua própria: nome, logotipo e arte são do Folio.
 
 ---
 
 ## 1. Human Interface Guidelines
 
-O que a reescrita **manteve**:
+O que está implementado:
 
 | Diretriz | Implementação | Onde |
 |---|---|---|
+| **Color** — System Colors oficiais | Fundos, labels, separadores, `systemBlue` e `systemRed` nos valores exatos, em claro e escuro. | `:root` em `styles.css` |
+| **Typography** — Text Styles do iOS | Pilha com SF Pro primeiro (Inter como reserva fora da Apple) e o *tracking* oficial convertido para `em`: Large Title +0,37, Title 1 +0,36, Title 2 +0,35, Body −0,43. | `--tr-*` |
+| **Materials** — chrome translúcido | `saturate(180%) blur(20px)` na barra superior, na barra inferior do celular, nos diálogos e no toast. | `--mat` |
 | **Layout** — alvo de toque de 44×44 pt | 44 px de mínimo em botões, chips e campos; 48 px na navegação lateral; 56 px nos itens da barra inferior. | `styles.css`, `reader.css` |
 | **Layout** — safe areas | `viewport-fit=cover` mais `env(safe-area-inset-*)` na barra superior, na barra inferior, no rodapé, no toast e em 10 pontos do leitor. | ambos os CSS |
 | **Tab Bars** — 3 a 5 abas no iPhone | Abaixo de 700 px a barra lateral vira barra inferior fixa com 5 itens (Hoje, Explorar, Trilhas, Biblioteca, Caderno), ícone sobre rótulo. | `styles.css` `@media(max-width:700px)` |
@@ -57,9 +59,6 @@ O que a reescrita **manteve**:
 | **Dark Mode** | Escuro é o padrão; claro é um tema completo em `[data-theme=light]`, não uma inversão. | `styles.css` |
 | **Reading experience** | Três temas de papel, quatro famílias tipográficas, corpo ajustável, modo foco — o leitor tem paleta independente do app, como no Apple Books. | `reader.css` |
 | **Unidades relativas** | 47 usos de `rem` no CSS da biblioteca; o texto acompanha o tamanho de fonte do navegador. | `styles.css` |
-
-O que **não** é mais atendido: System Colors, System Grays, os Text Styles do
-iOS e os materiais translúcidos — ver § 0.
 
 ### Onde a plataforma web não alcança
 
@@ -106,8 +105,7 @@ arquivo de terceiro. Coberto por teste:
 
 ## 3. O que falta para uma submissão de verdade
 
-1. **Decidir o rumo visual.** Voltar à paleta Apple do § 0 ou assumir a identidade nova. Hoje o projeto está entre as duas coisas, e a documentação antiga prometia a primeira.
-2. **Empacotar em nativo.** PWA não entra na App Store.
-3. **Publicar a política de privacidade** e preencher os Privacy Nutrition Labels.
-4. **Classificação etária** honesta no App Store Connect.
-5. **Auditoria com VoiceOver ligado** num aparelho real.
+1. **Empacotar em nativo.** PWA não entra na App Store.
+2. **Publicar a política de privacidade** e preencher os Privacy Nutrition Labels.
+3. **Classificação etária** honesta no App Store Connect.
+4. **Auditoria com VoiceOver ligado** num aparelho real.
