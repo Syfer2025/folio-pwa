@@ -1,95 +1,113 @@
 # Conformidade com as diretrizes da Apple
 
-Mapeamento entre o que a Apple exige e onde isso está implementado em `index.html`.
 Fontes: [App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) e
 [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines).
 
 ---
 
-## 0. Escopo — leia antes
+## 0. Leia antes
 
-**As App Store Review Guidelines valem para apps distribuídos pela App Store.** Um PWA
-instalado pelo Safari (Compartilhar › Adicionar à Tela de Início) não passa por App Review,
-então não há como "ser aprovado" nesse formato. O que este projeto faz é cumprir as regras
-como se fosse submetido, para que um empacotamento futuro (WKWebView/Capacitor) não precise
-ser reescrito. As três regras que mudam de status nesse dia estão em § 3.
+**As Review Guidelines valem para apps distribuídos pela App Store.** Um PWA
+instalado pelo Safari não passa por App Review, então não existe "aprovação"
+nesse formato. O projeto cumpre as regras como se fosse submetido, para que um
+empacotamento futuro (WKWebView/Capacitor) não precise ser reescrito.
 
-**Ponto de atenção — diretriz 5.2.5.** O pedido foi "estilo Apple TV+". A Apple *exige* que
-se siga a HIG, mas *proíbe* apps "confusingly similar to an existing Apple product, interface
-or advertising theme". A separação adotada aqui: foi copiado o **sistema** (cores, tipografia,
-materiais, componentes, gestos), que é o comportamento esperado; **não** foi copiada a
-**marca** — nome, logotipo, wordmark e arte do app Apple TV. `folio+` é um wordmark próprio.
-Layout de vitrine com herói e prateleiras horizontais é padrão de categoria, não é da Apple.
+### ⚠️ O sistema visual da Apple foi abandonado na reescrita
+
+O pedido original era seguir **estritamente** as cores e a tipografia da Apple,
+no estilo do app Apple TV. A versão até o commit `68ca780` fazia isso: os 12
+System Colors e 6 System Grays nos valores oficiais, os 11 Text Styles do iOS
+com tamanho, entrelinha e *tracking* oficiais, materiais translúcidos.
+
+A reescrita que trouxe importação de EPUB, IndexedDB e anotações **substituiu
+tudo isso** por um sistema próprio:
+
+| | Antes (`68ca780`) | Agora |
+|---|---|---|
+| Fundo | `#000000` (systemBackground) | `#111310` (verde-oliva escuro) |
+| Destaque | `#0A84FF` (systemBlue) | `#d4e6a4` / `#345323` |
+| Texto secundário | `rgba(235,235,245,.60)` | `#adb2a4` |
+| Tipografia | Text Styles do iOS com tracking oficial | Inter + Iowan Old Style, escala própria |
+| Vitrine | herói + prateleiras estilo Apple TV | barra lateral + grade editorial |
+
+Isso é uma **decisão de produto, não um bug** — mas contraria o requisito
+original. O CSS antigo está preservado em `work/styles-before.css` e no histórico
+git (`git show 68ca780:styles.css`). Restaurar a paleta Apple sobre a estrutura
+nova é trabalho de reaplicar tokens, não de reescrever o app.
+
+**Diretriz 5.2.5** — como efeito colateral, o risco de "confusingly similar to
+an existing Apple product" desapareceu por completo: o app não se parece mais
+com nenhum produto da Apple.
 
 ---
 
 ## 1. Human Interface Guidelines
 
+O que a reescrita **manteve**:
+
 | Diretriz | Implementação | Onde |
 |---|---|---|
-| **Color** — usar as System Colors, não cores inventadas | Os 12 System Colors + 6 System Grays nos valores oficiais, em claro e escuro. `systemBlue` (`#0A84FF` escuro / `#007AFF` claro) como tint. | CSS § 1–2 |
-| **Color** — hierarquia semântica | `label` / `secondaryLabel` / `tertiaryLabel` / `quaternaryLabel`, os 4 níveis de `fill`, `separator` e `opaqueSeparator`, todos nos alfas oficiais (ex.: `rgba(235,235,245,.60)`). | CSS § 1–2 |
-| **Dark Mode** — suportar as duas aparências | Escuro é o padrão (como o app Apple TV). Claro é completo, não é uma inversão. Controle **Sistema / Claro / Escuro** em Conta. | CSS § 1–2, `applyAppearance()` |
-| **Materials** — usar materiais translúcidos no chrome | Barras de navegação e de abas com `backdrop-filter: saturate(180%) blur(20px)` sobre tinta translúcida, equivalente ao `UIBlurEffect`. | CSS § 9–10, `--mat-*` |
-| **Typography** — usar os Text Styles do iOS | Os 11 estilos com **tamanho, entrelinha e tracking oficiais**: Large Title 34/41 (+0,37), Body 17/22 (−0,43), Caption 2 11/13 (+0,06) etc. Tracking convertido para `em` para escalar junto. | CSS § 4 |
-| **Typography** — San Francisco | `-apple-system` / `SF Pro` primeiro na pilha; em aparelhos não-Apple cai para Inter, que é a substituta métrica mais próxima. SF Pro não é redistribuível. | `--ui` |
-| **Dynamic Type** | `html { font-size: calc(100% * var(--dt)) }` — respeita o tamanho de texto do navegador **e** o controle de 7 passos em Conta, com os mesmos degraus do iOS. Tudo em `rem`, nada em `px` fixo. | CSS § 4, `applyDT()` |
-| **Layout** — alvo de toque de 44×44 pt | `--hit: 44px` em todo controle, incluindo os pontinhos do carrossel e o botão de limpar busca. | CSS `--hit` |
-| **Layout** — safe areas | `viewport-fit=cover` + `env(safe-area-inset-*)` no topo, na barra de abas e no leitor. | CSS § 6 |
-| **Tab Bars** — 3 a 5 abas, rótulo curto, ícone + texto | 4 abas: Folio · Folio+ · Biblioteca · Buscar. Item ativo recebe pílula de fundo atrás do ícone, como no app de referência. | § 10, `TAB_GLYPH` |
-| **Navigation Bars** — título grande que colapsa | Título grande rola para fora e o título inline aparece junto com o material opaco. Botão Voltar com rótulo, não só o chevron. | § 9, listener de `.scroller` |
-| **Modality** — sheets | Folhas com grabber, scrim tocável, `Esc`, foco movido para dentro e devolvido ao fechar. | `openSheet()` / `closeSheets()` |
-| **Motion** — respeitar Reduzir Movimento | `prefers-reduced-motion` zera transições **e** desliga o avanço automático do carrossel. | CSS § 5, `bbAuto()` |
-| **Accessibility** — Aumentar Contraste | `prefers-contrast: more` eleva os alfas de label e separador. | CSS § 3 |
-| **Accessibility** — VoiceOver | `role="tablist/tab/tabpanel"`, `aria-selected`, `aria-current`, `aria-pressed`, `aria-modal`, `role="switch"`. Cada capa tem rótulo com título, autor e progresso lido em voz alta. Toasts em `role="status"`. | markup |
-| **Accessibility** — teclado | `:focus-visible` com anel de 3 px no tint; setas ← → e Page Up/Down paginam o leitor; `Esc` fecha camadas. | CSS § 5, `keydown` |
-| **Reading experience** (padrão Apple Books) | Quatro temas — Original, Suave, Papel, Noite. Cinco fontes com nomes reais. Corpo de 14 a 30 pt. Paginação horizontal por colunas, com toque nas laterais, swipe e modo imersivo no toque central. | § 18, `openReader()` |
-| **Squircle** — cantos contínuos | `corner-shape: superellipse(4)` sob `@supports`, com raio comum como reserva. | `.sq` |
+| **Layout** — alvo de toque de 44×44 pt | 44 px de mínimo em botões, chips e campos; 48 px na navegação lateral; 56 px nos itens da barra inferior. | `styles.css`, `reader.css` |
+| **Layout** — safe areas | `viewport-fit=cover` mais `env(safe-area-inset-*)` na barra superior, na barra inferior, no rodapé, no toast e em 10 pontos do leitor. | ambos os CSS |
+| **Tab Bars** — 3 a 5 abas no iPhone | Abaixo de 700 px a barra lateral vira barra inferior fixa com 5 itens (Hoje, Explorar, Trilhas, Biblioteca, Caderno), ícone sobre rótulo. | `styles.css` `@media(max-width:700px)` |
+| **Motion** — Reduzir Movimento | `prefers-reduced-motion` zera animações e transições nos dois CSS. | ambos |
+| **Accessibility** — Aumentar Contraste | `prefers-contrast: more` promove `--muted` e `--dim` a `--text` e reforça as linhas. | ambos |
+| **Accessibility** — teclado | `:focus-visible` com anel de 3 px; link "Pular para o conteúdo"; foco devolvido ao botão de origem ao fechar o leitor (coberto por teste). | ambos, `reader.js` |
+| **Accessibility** — VoiceOver | `role`, `aria-current`, `aria-live`, `aria-busy`, `aria-label` na navegação, nos bancos e nos avisos. | `index.html`, `app.js` |
+| **Dark Mode** | Escuro é o padrão; claro é um tema completo em `[data-theme=light]`, não uma inversão. | `styles.css` |
+| **Reading experience** | Três temas de papel, quatro famílias tipográficas, corpo ajustável, modo foco — o leitor tem paleta independente do app, como no Apple Books. | `reader.css` |
+| **Unidades relativas** | 47 usos de `rem` no CSS da biblioteca; o texto acompanha o tamanho de fonte do navegador. | `styles.css` |
+
+O que **não** é mais atendido: System Colors, System Grays, os Text Styles do
+iOS e os materiais translúcidos — ver § 0.
 
 ### Onde a plataforma web não alcança
 
-Honestidade sobre os limites, para não parecer conformidade que não existe:
-
-- **Haptics.** `UIFeedbackGenerator` não tem equivalente no Safari do iOS. A Vibration API não é suportada lá. Sem retorno tátil.
-- **Voltar arrastando da borda.** O gesto interativo de `UINavigationController` não é reproduzível com fidelidade. Há botão Voltar e `Esc`.
-- **Compartilhar.** Hoje é um toast. A Web Share API (`navigator.share`) resolve com poucas linhas e chama a folha nativa — está na lista de pendências.
-- **Rotor do VoiceOver por capítulo.** Precisa de landmarks por capítulo no leitor paginado.
+- **Haptics.** Sem equivalente a `UIFeedbackGenerator` no Safari do iOS.
+- **Voltar arrastando da borda.** O gesto de `UINavigationController` não é reproduzível.
+- **Rotor do VoiceOver por capítulo.** Falta marcar landmarks por capítulo no leitor.
 
 ---
 
 ## 2. App Store Review Guidelines
 
-| Nº | Regra | Como é atendida |
+O app deixou de vender qualquer coisa. Não há assinatura, loja, preço nem conta —
+é uma biblioteca local com importação. Isso muda o que se aplica:
+
+| Nº | Regra | Situação |
 |---|---|---|
-| **1.2** | Conteúdo gerado por usuários precisa de denúncia, bloqueio e contato publicado | "Denunciar um problema" na ficha do livro e em Conta; contato visível (`suporte@folio.app`). **Pendente:** filtro e bloqueio só passam a ser exigidos quando houver resenhas escritas por usuários — hoje as notas são agregadas. |
-| **2.1** | Nada de placeholder | Todo texto é real: acervo, sinopses e trechos de obras existentes. Amostras terminam num estado explícito ("Fim da amostra"), não em texto cortado. |
-| **2.3.2** | Deixar claro o que exige compra | Selo `folio+` impresso no pôster para o que está na assinatura; preço em reais na ficha do livro para compra avulsa. |
-| **2.3.9** | Usar dados fictícios nas capturas de tela | O protótipo usa uma conta real para demonstração. **Antes de submeter, trocar por conta fictícia.** |
-| **3.1.1** | Conteúdo digital exige In-App Purchase | Não existe mecanismo próprio de desbloqueio, chave de licença nem link externo de pagamento. Todo fluxo de compra aponta para o pagamento da App Store. |
-| **3.1.2(a)** | Assinatura ≥ 7 dias, valor contínuo, em todos os aparelhos | R$ 19,90/mês; "acervo grande e continuamente atualizado" é exemplo citado pela própria diretriz; a aba Folio+ afirma a validade em todos os dispositivos. |
-| **3.1.2(c)** | Descrever o que se compra antes de comprar | Bloco legal na aba Folio+: preço, renovação automática, prazo de cancelamento de 24 h, onde cancelar, perda do período gratuito restante e condições da compra avulsa. |
-| **3.1.1** | Restauração de compras | "Restaurar compras" na aba Folio+ e em Conta. |
-| **3.1.3(a)** | **Reader Apps** | É exatamente a categoria deste app ("magazines, newspapers, **books**, audio, music, video"). Permite acessar conteúdo já adquirido e gerenciar conta, sem link externo de compra — que exigiria o External Link Account Entitlement. |
-| **4.2** | Precisa ser mais que um site empacotado | Leitura offline com download por título, tipografia com 4 temas e 5 fontes, sincronia de posição, atalhos no ícone, Dynamic Type. |
-| **4.8** | Sign in with Apple | Não há login social, então a regra não se aplica hoje. **Se entrar login com Google/Facebook, Sign in with Apple passa a ser obrigatório.** |
-| **5.1.1(i)** | Política de privacidade acessível dentro do app | Conta › Privacidade e dados › Política de privacidade. |
-| **5.1.1(ii)** | Consentimento e revogação fáceis | "Compartilhar análises de leitura" vem **desligado**, com revogação no mesmo lugar. |
-| **5.1.1(iii)** | Minimização de dados | Sem localização, contatos, fotos, câmera, microfone ou notificações. O `sw.js` não envia nada a terceiros. |
-| **5.1.1(v)** | Uso sem login e **exclusão de conta no app** | O acervo em domínio público é navegável e legível sem conta. "Apagar conta" existe dentro do app, com prazo declarado de 30 dias. |
-| **5.1.2** | Uso e compartilhamento de dados | Nenhum dado sai do dispositivo. Sem SDK de terceiros, sem rastreadores. As únicas requisições externas são as fontes do Google Fonts. |
-| **5.2.1 / 5.2.2** | Direitos sobre o material | Acervo em domínio público no Brasil (Lei 9.610/98, art. 41). Cada ficha traz o campo "Direitos". As capas são geradas por código, não são reproduções de capas comerciais. |
-| **5.2.5** | Não parecer um produto Apple | Ver § 0. Sistema sim, marca não. |
+| **2.1** | Nada de placeholder | Quatro obras **integrais** de Machado de Assis, não trechos. Estados vazios são estados reais, com ação de saída. |
+| **2.5.2** | Dados dentro do container do app | IndexedDB e localStorage. Nada fora. O service worker não intercepta origem externa nem documento do usuário. |
+| **3.1.1** | IAP obrigatório para conteúdo digital | **Não se aplica.** Não há desbloqueio, chave, preço ou link de pagamento em lugar nenhum. |
+| **3.1.2** | Assinaturas | **Não se aplica.** Não existe assinatura. |
+| **3.1.3(a)** | Reader Apps | Continua sendo a categoria correta: o app abre conteúdo que a pessoa já possui. |
+| **4.2** | Precisa ser mais que um site empacotado | É o ponto mais forte agora: importação de EPUB/TXT/JSON, leitura offline completa, anotações, sessões cronometradas, leitura em voz alta, backup e restauração. |
+| **4.8** | Sign in with Apple | **Não se aplica.** Não há login de espécie alguma. |
+| **5.1.1(i)** | Política de privacidade | **Pendente.** Precisa ser escrita e publicada numa URL antes de qualquer submissão — ainda que o texto seja curto, já que não há coleta. |
+| **5.1.1(ii–iii)** | Consentimento e minimização | Não há coleta, telemetria, analytics nem SDK de terceiros. Nenhuma requisição sai do dispositivo. |
+| **5.1.1(v)** | Uso sem login e exclusão de dados | Não há conta. Preferências e dados permitem apagar tudo, e a exclusão de um livro remove junto o payload offline (coberto por teste). |
+| **5.1.2** | Uso e compartilhamento | Nada é compartilhado. Não existe destino para onde enviar. |
+| **5.2.1** | Direitos sobre o material | As quatro obras estão em domínio público no Brasil (Lei 9.610/98, art. 41), com edição-fonte e SHA-256 registrados em `books/SOURCES.md`. Livros importados são responsabilidade de quem importa. |
+| **5.2.5** | Não parecer produto Apple | Ver § 0. |
+
+### Segurança da importação
+
+Não é diretriz da App Store, mas é o que mais poderia dar errado ao abrir
+arquivo de terceiro. Coberto por teste:
+
+- ZIP validado antes de extrair: travessia de caminho, entrada cifrada,
+  diretório inconsistente e limite de expansão
+- XHTML sem elemento executável nem referência externa
+- TXT binário e arquivo acima do tamanho declarado são rejeitados
+- Chaves de protótipo (`__proto__` e afins) rejeitadas no estado
+- Restauração de backup com rollback: falha volta ao estado anterior
 
 ---
 
 ## 3. O que falta para uma submissão de verdade
 
-Em ordem de esforço:
-
-1. **Empacotar em nativo.** PWA não entra na App Store. Com WKWebView, a diretriz 4.2 passa a ser avaliada de verdade — as funções offline e de tipografia acima são o que sustenta o argumento.
-2. **StoreKit 2.** Substituir os toasts de compra por produtos reais, com `Product.purchase()`, restauração e tratamento de estados de assinatura.
-3. **Política de privacidade publicada** numa URL, mais o preenchimento dos Privacy Nutrition Labels no App Store Connect.
-4. **Trocar a conta de demonstração** por dados fictícios nas capturas (2.3.9).
-5. **Classificação etária** honesta no App Store Connect (2.3.6). O acervo inclui obras com violência e temas adultos — *Noite na Taverna* e *Crime e Castigo*, por exemplo.
-6. **Auditoria com VoiceOver ligado** num aparelho real, não só pela árvore de acessibilidade.
-7. **Licenciamento** de tudo que sair do domínio público, antes de entrar no acervo.
+1. **Decidir o rumo visual.** Voltar à paleta Apple do § 0 ou assumir a identidade nova. Hoje o projeto está entre as duas coisas, e a documentação antiga prometia a primeira.
+2. **Empacotar em nativo.** PWA não entra na App Store.
+3. **Publicar a política de privacidade** e preencher os Privacy Nutrition Labels.
+4. **Classificação etária** honesta no App Store Connect.
+5. **Auditoria com VoiceOver ligado** num aparelho real.

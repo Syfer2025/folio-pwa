@@ -1,17 +1,17 @@
 {
-  "id": "/folio/",
-  "name": "Folio — leitura por assinatura",
+  "id": "./",
+  "name": "Folio — no seu tempo",
   "short_name": "Folio",
-  "description": "Leia clássicos em domínio público e edições licenciadas. Acervo curado, leitor tipográfico completo e sincronia entre dispositivos.",
+  "description": "Sua biblioteca pessoal, leitura offline, sessões no seu ritmo e um caderno para guardar ideias.",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "orientation": "any",
+  "background_color": "#111310",
+  "theme_color": "#111310",
   "categories": ["books", "education", "entertainment"],
   "prefer_related_applications": false,
   "icons": [
@@ -23,6 +23,6 @@
   "shortcuts": [
     { "name": "Continuar lendo", "short_name": "Continuar", "url": "./index.html#continuar", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
     { "name": "Biblioteca", "short_name": "Biblioteca", "url": "./index.html#biblioteca", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Buscar", "short_name": "Buscar", "url": "./index.html#buscar", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Explorar", "short_name": "Explorar", "url": "./index.html#explorar", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
   ]
 }

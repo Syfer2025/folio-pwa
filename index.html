@@ -1,347 +1,47 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#000000">
-<meta name="description" content="Folio — leitura por assinatura. Acervo em domínio público e edições licenciadas, com leitor tipográfico completo.">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Folio">
-<meta name="format-detection" content="telephone=no">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
-<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Literata:opsz,wght@7..72,400;7..72,600&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&display=swap">
-<link rel="stylesheet" href="styles.css">
-<title>Folio</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light"><meta name="theme-color" content="#111310">
+<meta name="description" content="Folio — leitura brasileira no seu tempo. Sua biblioteca, suas anotações, sua próxima boa leitura.">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Folio"><link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="reader.css">
+<title>Folio — no seu tempo</title>
+<script src="catalog.js" defer></script><script src="storage.js" defer></script>
+<script src="vendor/fflate.min.js" defer></script><script src="import.js" defer></script>
+<script src="reader.js" defer></script><script src="app.js" defer></script>
 </head>
 <body>
-<svg class="vh" aria-hidden="true" focusable="false"><defs>
-  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6.6S10 4.6 6.5 4.6c-1.5 0-2.5.3-2.5.3v13s1-.3 2.5-.3c3.5 0 5.5 2 5.5 2s2-2 5.5-2c1.5 0 2.5.3 2.5.3v-13s-1-.3-2.5-.3c-3.5 0-5.5 2-5.5 2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6.6v13" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
-  <symbol id="i-book-fill" viewBox="0 0 24 24"><path d="M11.2 6.9C10.3 6 8.6 4.6 6.5 4.6c-1.5 0-2.5.3-2.5.3v13s1-.3 2.5-.3c2.6 0 4.3 1.1 4.7 1.5V6.9Zm1.6 0v12.2c.4-.4 2.1-1.5 4.7-1.5 1.5 0 2.5.3 2.5.3v-13s-1-.3-2.5-.3c-2.1 0-3.8 1.4-4.7 2.3Z" fill="currentColor"/></symbol>
-  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5.4 8h13.2l-.85 11.1A2.1 2.1 0 0 1 15.66 21H8.34a2.1 2.1 0 0 1-2.09-1.9L5.4 8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.1 8.6V6.6a2.9 2.9 0 0 1 5.8 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
-  <symbol id="i-bag-fill" viewBox="0 0 24 24"><path d="M8.3 8V6.6a3.7 3.7 0 0 1 7.4 0V8h2.9l-.85 11.1A2.1 2.1 0 0 1 15.66 21H8.34a2.1 2.1 0 0 1-2.09-1.9L5.4 8h2.9Zm1.6 0h4.2V6.6a2.1 2.1 0 0 0-4.2 0V8Z" fill="currentColor"/></symbol>
-  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.6" cy="10.6" r="6.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M15.4 15.4 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
-  <symbol id="i-books" viewBox="0 0 24 24"><rect x="3.4" y="5" width="3.6" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.55"/><rect x="8.6" y="5" width="3.6" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="1.55"/><path d="m14.9 6.6 3.3.9a1 1 0 0 1 .7 1.23L15.9 19.3l-3.05-.83" fill="none" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/></symbol>
-  <symbol id="i-books-fill" viewBox="0 0 24 24"><rect x="3.4" y="5" width="3.6" height="14" rx="1" fill="currentColor"/><rect x="8.6" y="5" width="3.6" height="14" rx="1" fill="currentColor"/><path d="m14.6 5.8 3.6 1a1.2 1.2 0 0 1 .84 1.47L15.8 19.6l-2.5-.68V6.6l1.3-.8Z" fill="currentColor"/></symbol>
-  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9.2 4.8 7.2 7.2-7.2 7.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.8 4.8 7.6 12l7.2 7.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m4.8 9 7.2 7.2L19.2 9" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7.6 5.1a.6.6 0 0 1 .92-.5l10 6.9a.6.6 0 0 1 0 1l-10 6.9a.6.6 0 0 1-.92-.5V5.1Z" fill="currentColor"/></symbol>
-  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4.6v14.8M4.6 12h14.8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.6 4.9 4.9L19.4 7.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-download" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.4v9.2m0 0-3.4-3.4M12 16.6l3.4-3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-downloaded" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="currentColor"/><path d="m8 12.2 2.8 2.8L16.2 9.6" fill="none" stroke="var(--bg)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15.2V3.6m0 0L8.6 7M12 3.6 15.4 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6 10.6h-.4A1.8 1.8 0 0 0 4.4 12.4v6.4a1.8 1.8 0 0 0 1.8 1.8h11.6a1.8 1.8 0 0 0 1.8-1.8v-6.4a1.8 1.8 0 0 0-1.8-1.8h-.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
-  <symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="5.6" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="18.4" cy="12" r="1.7" fill="currentColor"/></symbol>
-  <symbol id="i-list" viewBox="0 0 24 24"><circle cx="4.6" cy="6.6" r="1.3" fill="currentColor"/><circle cx="4.6" cy="12" r="1.3" fill="currentColor"/><circle cx="4.6" cy="17.4" r="1.3" fill="currentColor"/><path d="M8.6 6.6h11M8.6 12h11M8.6 17.4h11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
-  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.6 5.4A1.4 1.4 0 0 1 8 4h8a1.4 1.4 0 0 1 1.4 1.4v14.2L12 15.8l-5.4 3.8V5.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
-  <symbol id="i-bookmark-fill" viewBox="0 0 24 24"><path d="M6.6 5.4A1.4 1.4 0 0 1 8 4h8a1.4 1.4 0 0 1 1.4 1.4v14.2L12 15.8l-5.4 3.8V5.4Z" fill="currentColor"/></symbol>
-  <symbol id="i-xcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor"/><path d="m9 9 6 6m0-6-6 6" fill="none" stroke="var(--bg-2)" stroke-width="1.9" stroke-linecap="round"/></symbol>
-  <symbol id="i-person-fill" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.95" fill="currentColor"/><path d="M12 13.5c-4 0-7.2 2.3-7.2 5 0 .95.75 1.5 1.8 1.5h10.8c1.05 0 1.8-.55 1.8-1.5 0-2.7-3.2-5-7.2-5Z" fill="currentColor"/></symbol>
-  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.9" r="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5.9 18.8a7 7 0 0 1 12.2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
-  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4.6 15.4v-3.2a7.4 7.4 0 0 1 14.8 0v3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="3" y="13.6" width="3.8" height="6.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="17.2" y="13.6" width="3.8" height="6.4" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.6 2.6 5.5 5.9.8-4.3 4.2 1 6-5.2-2.9-5.2 2.9 1-6L3.5 9.9l5.9-.8L12 3.6Z" fill="currentColor"/></symbol>
-  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="7.9" r="1.05" fill="currentColor"/></symbol>
-  <symbol id="i-aa" viewBox="0 0 24 24"><text x="12" y="17" text-anchor="middle" font-family="inherit" font-size="15" font-weight="600" fill="currentColor">Aa</text></symbol>
-  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5.4 12h13.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
-</defs></svg>
-
-<div class="stage">
-<div class="device sq" id="device">
-
-  <div class="screens">
-
-    <!-- ============ ABA 1: LER AGORA ============ -->
-    <section class="screen is-active" id="scr-now" role="tabpanel" aria-labelledby="tab-now" tabindex="-1">
-      <nav class="navbar is-solid" id="nav-now">
-        <div class="navbar-row">
-          <span style="min-width:44px"></span>
-          <h1 class="nav-wordmark">folio</h1>
-          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira">
-            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
-          </button>
-        </div>
-      </nav>
-      <div class="scroller" data-nav="nav-now" data-nav-from="-1">
-        <div class="billboard">
-          <div class="bb-track" id="bb-track" role="group" aria-roledescription="carrossel" aria-label="Destaques"></div>
-          <div class="bb-dots" id="bb-dots" role="tablist" aria-label="Selecionar destaque"></div>
-        </div>
-        <div id="now-shelves"></div>
-        <div class="scroller-pad"></div>
-      </div>
-    </section>
-
-    <!-- ============ ABA 2: FOLIO+ ============ -->
-    <section class="screen" id="scr-plus" role="tabpanel" aria-labelledby="tab-plus" tabindex="-1">
-      <nav class="navbar" id="nav-plus">
-        <div class="navbar-row">
-          <span style="min-width:44px"></span>
-          <h1 class="navbar-title">Folio+</h1>
-          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira">
-            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
-          </button>
-        </div>
-      </nav>
-      <div class="scroller" data-nav="nav-plus" data-nav-from="150">
-        <div class="plus-hero">
-          <div class="bb-art" aria-hidden="true" style="background:radial-gradient(74% 46% at 22% 14%,#C9A227A6 0%,rgba(0,0,0,0) 60%),radial-gradient(58% 38% at 86% 26%,#EFE7D52E 0%,rgba(0,0,0,0) 62%),radial-gradient(126% 84% at 92% 96%,#1E2E4A 0%,rgba(0,0,0,0) 64%),linear-gradient(163deg,#1E2E4A 0%,#080F1C 92%)">
-            <span style="position:absolute;left:6%;top:4%;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#C9A227C4 0%,#C9A22733 40%,rgba(0,0,0,0) 66%)"></span>
-            <span class="bb-grain"></span>
-          </div>
-          <div class="bb-scrim"></div><div class="bb-scrim-top"></div>
-          <div style="position:relative;z-index:2">
-            <p class="plus-wordmark">folio<i>+</i></p>
-            <p class="plus-pitch">Todo o acervo, sem anúncios, com narração e sincronia entre dispositivos.</p>
-            <p class="plus-price">R$ 19,90/mês depois de 7 dias grátis. Cancele quando quiser.</p>
-            <div class="plus-actions">
-              <button class="btn btn-prominent" type="button" data-act="subscribe">Assinar teste grátis</button>
-              <button class="btn btn-gray" type="button" data-act="restore">Restaurar compras</button>
-            </div>
-          </div>
-        </div>
-        <div id="plus-shelves"></div>
-        <p class="legal" id="plus-legal"></p>
-        <div class="scroller-pad"></div>
-      </div>
-    </section>
-
-    <!-- ============ ABA 3: BUSCAR ============ -->
-    <section class="screen" id="scr-search" role="tabpanel" aria-labelledby="tab-search" tabindex="-1">
-      <nav class="navbar is-solid" id="nav-search">
-        <div class="navbar-row"><span style="min-width:44px"></span><h1 class="navbar-title">Buscar</h1><span style="min-width:44px"></span></div>
-      </nav>
-      <div class="scroller" data-nav="nav-search" data-nav-from="34">
-        <div style="height:calc(var(--safe-top) + var(--navbar-h))"></div>
-        <h2 class="large-title">Buscar</h2>
-        <div class="searchfield">
-          <label class="sf-box" for="q">
-            <svg width="17" height="17" aria-hidden="true"><use href="#i-search"/></svg>
-            <input id="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
-                   placeholder="Livros, autores, coleções" aria-label="Buscar livros, autores e coleções">
-            <button class="btn-clear" type="button" id="q-clear" aria-label="Limpar busca" hidden
-                    style="min-width:28px;min-height:28px;display:grid;place-items:center;color:var(--label-3)">
-              <svg width="17" height="17" aria-hidden="true"><use href="#i-xcircle"/></svg>
-            </button>
-          </label>
-          <button class="sf-cancel" type="button" id="q-cancel" hidden>Cancelar</button>
-        </div>
-        <div id="search-body"></div>
-        <div class="scroller-pad"></div>
-      </div>
-    </section>
-
-    <!-- ============ ABA 5: BIBLIOTECA ============ -->
-    <section class="screen" id="scr-lib" role="tabpanel" aria-labelledby="tab-lib" tabindex="-1">
-      <nav class="navbar" id="nav-lib">
-        <div class="navbar-row"><span style="min-width:44px"></span><h1 class="navbar-title">Biblioteca</h1><span style="min-width:44px"></span></div>
-      </nav>
-      <div class="scroller" data-nav="nav-lib" data-nav-from="34">
-        <div style="height:calc(var(--safe-top) + var(--navbar-h))"></div>
-        <div class="large-title-row">
-          <h2 class="large-title">Biblioteca</h2>
-          <button class="nav-btn avatar-btn" type="button" data-sheet="sheet-account" aria-label="Conta de Alex Meira" style="margin-bottom:6px">
-            <span class="avatar" aria-hidden="true"><svg width="19" height="19"><use href="#i-person-fill"/></svg></span>
-          </button>
-        </div>
-        <div class="segmented" role="tablist" aria-label="Filtrar biblioteca" id="lib-seg">
-          <button class="seg" type="button" role="tab" aria-selected="true" data-seg="lendo">Lendo</button>
-          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="quero">Quero ler</button>
-          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="fim">Concluídos</button>
-          <button class="seg" type="button" role="tab" aria-selected="false" data-seg="off">Baixados</button>
-        </div>
-        <div id="lib-body"></div>
-        <div class="scroller-pad"></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- ============ CAMADA: FICHA DO LIVRO ============ -->
-  <div class="stack-layer" id="layer-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" aria-hidden="true">
-    <nav class="navbar" id="nav-detail">
-      <div class="navbar-row">
-        <button class="nav-btn nav-back" type="button" data-close="layer-detail">
-          <svg width="19" height="19" aria-hidden="true"><use href="#i-chev-l"/></svg><span id="detail-backlabel">Voltar</span>
-        </button>
-        <h2 class="navbar-title" id="detail-navtitle"></h2>
-        <button class="nav-btn" type="button" data-act="share" aria-label="Compartilhar">
-          <svg width="21" height="21" aria-hidden="true"><use href="#i-share"/></svg>
-        </button>
-      </div>
-    </nav>
-    <div class="scroller" data-nav="nav-detail" data-nav-from="210" id="detail-scroller">
-      <div id="detail-body"></div>
-      <div style="height:34px"></div>
-    </div>
-  </div>
-
-  <!-- ============ CAMADA: LEITOR ============ -->
-  <div class="stack-layer reader" id="layer-reader" data-rtheme="night" role="dialog" aria-modal="true" aria-label="Leitor" aria-hidden="true">
-    <nav class="navbar is-solid" id="nav-reader">
-      <div class="navbar-row">
-        <button class="nav-btn nav-back" type="button" data-close="layer-reader" aria-label="Fechar leitor e voltar">
-          <svg width="19" height="19" aria-hidden="true"><use href="#i-chev-l"/></svg>
-        </button>
-        <h2 class="navbar-title" id="reader-navtitle"></h2>
-        <button class="nav-btn" type="button" data-sheet="sheet-toc" aria-label="Sumário e marcadores">
-          <svg width="20" height="20" aria-hidden="true"><use href="#i-list"/></svg>
-        </button>
-        <button class="nav-btn" type="button" data-sheet="sheet-aa" aria-label="Opções de exibição e tipografia">
-          <svg width="22" height="22" aria-hidden="true"><use href="#i-aa"/></svg>
-        </button>
-      </div>
-    </nav>
-    <div class="reader-page" id="reader-page">
-      <div class="reader-col" id="reader-col"></div>
-      <div class="reader-tap">
-        <button type="button" data-page="-1" aria-label="Página anterior"></button>
-        <button type="button" data-page="0" aria-label="Mostrar ou ocultar controles"></button>
-        <button type="button" data-page="1" aria-label="Próxima página"></button>
-      </div>
-    </div>
-    <div class="reader-foot">
-      <span id="reader-left"></span>
-      <span id="reader-pos"></span>
-    </div>
-  </div>
-
-  <!-- ============ BARRA DE ABAS ============ -->
-  <nav class="tabbar" aria-label="Navegação principal">
-    <div class="tabbar-row" role="tablist">
-      <button class="tab" type="button" role="tab" id="tab-now" aria-controls="scr-now" aria-selected="true" data-tab="now">
-        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-book-fill"/></svg></span>
-        <span class="tab-label">Folio</span>
-      </button>
-      <button class="tab" type="button" role="tab" id="tab-plus" aria-controls="scr-plus" aria-selected="false" data-tab="plus">
-        <span class="tab-pill"><span class="wordmark" aria-hidden="true">folio+</span></span>
-        <span class="tab-label">Folio+</span>
-      </button>
-      <button class="tab" type="button" role="tab" id="tab-lib" aria-controls="scr-lib" aria-selected="false" data-tab="lib">
-        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-books"/></svg></span>
-        <span class="tab-label">Biblioteca</span>
-      </button>
-      <button class="tab" type="button" role="tab" id="tab-search" aria-controls="scr-search" aria-selected="false" data-tab="search">
-        <span class="tab-pill"><svg width="24" height="24" aria-hidden="true"><use href="#i-search"/></svg></span>
-        <span class="tab-label">Buscar</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ============ FOLHAS MODAIS ============ -->
-  <div class="sheet-scrim" id="scrim" hidden></div>
-
-  <aside class="sheet" id="sheet-aa" role="dialog" aria-modal="true" aria-labelledby="aa-h" aria-hidden="true">
-    <div class="grabber" aria-hidden="true"></div>
-    <div class="sheet-head"><h3 id="aa-h">Exibição</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
-
-    <div class="sheet-group">
-      <h4>Tamanho do texto</h4>
-      <div class="stepper">
-        <button type="button" id="rd-smaller" aria-label="Diminuir tamanho do texto"><span class="s-a" style="font-size:15px">A</span></button>
-        <button type="button" id="rd-bigger" aria-label="Aumentar tamanho do texto"><span class="s-a" style="font-size:22px">A</span></button>
-      </div>
-      <p class="list-note" id="rd-size-note" aria-live="polite"></p>
-    </div>
-
-    <div class="sheet-group">
-      <h4>Tema</h4>
-      <div class="theme-row" id="rd-themes">
-        <button class="theme-swatch" type="button" data-rtheme="original" aria-pressed="false" aria-label="Tema Original" style="background:#FFF;color:#000">Aa</button>
-        <button class="theme-swatch" type="button" data-rtheme="quiet" aria-pressed="false" aria-label="Tema Suave" style="background:#F7F2E7;color:#2B2620">Aa</button>
-        <button class="theme-swatch" type="button" data-rtheme="paper" aria-pressed="false" aria-label="Tema Papel" style="background:#D9D2C4;color:#25211B">Aa</button>
-        <button class="theme-swatch" type="button" data-rtheme="night" aria-pressed="true" aria-label="Tema Noite" style="background:#000;color:#EBEBF5">Aa</button>
-      </div>
-    </div>
-
-    <div class="sheet-group">
-      <h4>Fonte</h4>
-      <div class="list font-list" id="rd-fonts"></div>
-    </div>
-
-    <div class="sheet-group">
-      <div class="list">
-        <button class="list-row" type="button" id="rd-scroll" role="switch" aria-checked="false">
-          <span>Rolagem contínua</span><span class="switch" aria-hidden="true"></span>
-        </button>
-        <button class="list-row" type="button" id="rd-auto" role="switch" aria-checked="true">
-          <span>Acompanhar aparência do sistema</span><span class="switch" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </aside>
-
-  <aside class="sheet" id="sheet-toc" role="dialog" aria-modal="true" aria-labelledby="toc-h" aria-hidden="true">
-    <div class="grabber" aria-hidden="true"></div>
-    <div class="sheet-head"><h3 id="toc-h">Sumário</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
-    <div class="list" id="toc-list"></div>
-  </aside>
-
-  <aside class="sheet" id="sheet-account" role="dialog" aria-modal="true" aria-labelledby="acc-h" aria-hidden="true">
-    <div class="grabber" aria-hidden="true"></div>
-    <div class="sheet-head"><h3 id="acc-h">Conta</h3><button class="btn-plain" type="button" data-close-sheet>OK</button></div>
-
-    <div class="sheet-group">
-      <div class="list">
-        <div class="list-row"><span class="avatar" aria-hidden="true" style="width:38px;height:38px;font-size:.875rem">AM</span>
-          <span><b style="font:var(--f-headline);letter-spacing:var(--tr-headline)">Alex Meira</b><br>
-          <small style="font:var(--f-footnote);letter-spacing:var(--tr-footnote);color:var(--label-2)">Folio+ · renova em 3 de outubro</small></span>
-        </div>
-        <button class="list-row" type="button" data-act="manage"><span>Gerenciar assinatura</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
-        <button class="list-row" type="button" data-act="restore"><span>Restaurar compras</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
-      </div>
-    </div>
-
-    <div class="sheet-group">
-      <h4>Aparência</h4>
-      <div class="segmented" id="appearance" role="tablist" aria-label="Aparência do app" style="margin:0">
-        <button class="seg" type="button" role="tab" data-appear="auto" aria-selected="true">Sistema</button>
-        <button class="seg" type="button" role="tab" data-appear="light" aria-selected="false">Claro</button>
-        <button class="seg" type="button" role="tab" data-appear="dark" aria-selected="false">Escuro</button>
-      </div>
-    </div>
-
-    <div class="sheet-group">
-      <h4>Tamanho do texto do app</h4>
-      <div class="stepper">
-        <button type="button" id="dt-smaller" aria-label="Diminuir tamanho do texto do app"><svg width="20" height="20" aria-hidden="true"><use href="#i-minus"/></svg></button>
-        <button type="button" id="dt-reset" aria-label="Restaurar tamanho padrão"><span style="font:var(--f-subhead);font-weight:600" id="dt-value">Padrão</span></button>
-        <button type="button" id="dt-bigger" aria-label="Aumentar tamanho do texto do app"><svg width="20" height="20" aria-hidden="true"><use href="#i-plus"/></svg></button>
-      </div>
-      <p class="list-note">Acompanha o Tamanho do Texto do sistema (Dynamic Type). Este controle ajusta apenas o Folio.</p>
-    </div>
-
-    <div class="sheet-group">
-      <h4>Privacidade e dados</h4>
-      <div class="list">
-        <button class="list-row" type="button" role="switch" aria-checked="false" data-act="analytics">
-          <span>Compartilhar análises de leitura</span><span class="switch" aria-hidden="true"></span>
-        </button>
-        <button class="list-row" type="button" data-act="privacy"><span>Política de privacidade</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
-        <button class="list-row" type="button" data-act="export"><span>Baixar meus dados</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
-        <button class="list-row" type="button" data-act="delete"><span style="color:var(--sys-red)">Apagar conta</span></button>
-      </div>
-      <p class="list-note">A coleta é desativada por padrão e pode ser revogada a qualquer momento. Apagar a conta remove leitura, marcadores e notas em até 30 dias.</p>
-    </div>
-
-    <div class="sheet-group">
-      <div class="list">
-        <button class="list-row" type="button" data-act="report"><span>Denunciar um problema no conteúdo</span><svg class="chev" width="15" height="15" style="margin-left:auto" aria-hidden="true"><use href="#i-chev-r"/></svg></button>
-        <button class="list-row" type="button" data-act="support"><span>Suporte</span><span class="lr-value">suporte@folio.app</span></button>
-      </div>
-    </div>
-  </aside>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-</div>
-</div>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
-</body>
-</html>
+<a class="skip-link" href="#main">Pular para o conteúdo</a>
+<aside class="sidebar" aria-label="Folio">
+<a class="wordmark" href="#hoje" aria-label="Folio, início"><span class="brand-mark" aria-hidden="true">f.</span>folio</a>
+<p class="nav-caption">UM LIVRO POR VEZ</p>
+<nav class="main-nav" aria-label="Navegação principal">
+<a href="#hoje" data-nav="hoje" aria-current="page"><span data-icon="home"></span><span>Hoje</span></a>
+<a href="#explorar" data-nav="explorar"><span data-icon="search"></span><span>Explorar</span></a>
+<a href="#trilhas" data-nav="trilhas"><span data-icon="path"></span><span>Trilhas</span></a>
+<a href="#biblioteca" data-nav="biblioteca"><span data-icon="library"></span><span>Biblioteca</span></a>
+<a href="#caderno" data-nav="caderno"><span data-icon="pen"></span><span>Caderno</span><span id="note-count" class="nav-count" hidden></span></a>
+</nav>
+<div class="sidebar-bottom">
+<div class="local-label"><span class="status-dot"></span><span id="connection-label">Sua biblioteca pessoal</span></div>
+<button class="button secondary import-side" data-action="import"><span data-icon="upload"></span>Importar livro</button>
+<button class="settings-link" data-action="settings"><span data-icon="settings"></span>Preferências e dados</button>
+<p class="sidebar-foot">Feito para ler. Feito para ficar.</p>
+</div></aside>
+<div class="workspace">
+<header class="topbar"><a class="mobile-wordmark" href="#hoje" aria-label="Folio, início">folio</a><span class="date-label" id="today-date"></span>
+<div class="topbar-actions"><button class="top-search" data-action="search" aria-label="Buscar livros"><span data-icon="search"></span><span>Encontre sua próxima leitura</span><kbd>/</kbd></button>
+<button class="icon-button" data-action="settings" aria-label="Preferências e dados"><span data-icon="settings"></span></button></div></header>
+<div id="connection-banner" class="connection-banner" role="status" hidden></div>
+<div id="storage-banner" class="error-banner" role="alert" hidden></div>
+<main id="main" tabindex="-1" aria-busy="true"><div class="boot-state"><span class="wordmark">folio</span><p>Abrindo sua biblioteca…</p></div></main>
+<footer class="app-footer"><span>folio · leitura no seu tempo</span><span>Biblioteca e anotações neste dispositivo</span></footer></div>
+<dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title"><div id="dialog-body"></div></dialog>
+<input id="book-file" type="file" accept=".epub,.txt,.json,application/epub+zip,text/plain,application/json" hidden>
+<input id="backup-file" type="file" accept=".json,application/json" hidden>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<noscript><p class="no-script">Ative o JavaScript no navegador para abrir sua biblioteca e o leitor.</p></noscript>
+</body></html>

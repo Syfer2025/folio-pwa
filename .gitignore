@@ -10,3 +10,11 @@ desktop.ini
 
 # Node, caso entre um servidor local
 node_modules/
+
+# Saídas geradas e arquivos de trabalho locais
+dist/
+work/
+test-results/
+playwright-report/
+.folio-build-*/
+.folio-previous-*/

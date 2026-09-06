@@ -1,90 +1,66 @@
-/* Folio — service worker
-   Estratégia:
-   - shell do app: cache-first, atualizado em segundo plano
-   - navegação: rede primeiro, com o shell em cache como reserva offline
-   - fontes (Google Fonts): cache-first, cache separado e de longa duração
-   Nada é enviado a terceiros. Nenhum dado do leitor sai do dispositivo. */
+/* Folio: an atomic, same-origin app shell. Reading data lives in IndexedDB.
+   Build and development server replace the release token with a content hash.
+   Updates wait for acceptance so an open reading session is not reloaded. */
+'use strict';
 
-const VERSION = "folio-v2";
-const SHELL = VERSION + "-shell";
-const FONTS = VERSION + "-fonts";
-
-const SHELL_URLS = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./data.js",
-  "./app.js",
-  "./manifest.webmanifest",
-  "./icons/icon.svg",
-  "./icons/icon-180.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+const RELEASE = '__FOLIO_RELEASE__';
+const SCOPE = self.registration.scope;
+const CACHE_PREFIX = 'folio-shell:' + encodeURIComponent(SCOPE) + ':';
+const SHELL_CACHE = CACHE_PREFIX + RELEASE;
+const SHELL_FILES = [
+  'index.html', 'styles.css', 'reader.css', 'app.js', 'catalog.js', 'storage.js',
+  'import.js', 'reader.js', 'vendor/fflate.min.js', 'manifest.webmanifest',
+  'icons/icon.svg', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
+  'icons/icon-maskable-512.png'
 ];
+const SHELL_URLS = SHELL_FILES.map(file => new URL(file, SCOPE).href);
+const SHELL_PATHS = new Map(SHELL_URLS.map(url => [new URL(url).pathname, url]));
+const INDEX_URL = new URL('index.html', SCOPE).href;
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(SHELL)
-      .then(c => c.addAll(SHELL_URLS))
-      .then(() => self.skipWaiting())
-  );
+self.addEventListener('install', event => {
+  // addAll is atomic: a missing asset leaves the working version in control.
+  event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(
+    SHELL_URLS.map(url => new Request(url, { cache: 'reload', credentials: 'same-origin' }))
+  )));
 });
 
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== SHELL && k !== FONTS).map(k => caches.delete(k))
-      ))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(key =>
+      (key.startsWith(CACHE_PREFIX) && key !== SHELL_CACHE) ||
+      key === 'folio-v2-shell' || key === 'folio-v2-fonts'
+    ).map(key => caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener("fetch", event => {
-  const req = event.request;
-  if (req.method !== "GET") return;
+self.addEventListener('message', event => {
+  if (event.data?.type === 'SKIP_WAITING') event.waitUntil(self.skipWaiting());
+  if (event.data?.type === 'GET_VERSION') event.ports?.[0]?.postMessage({ type: 'FOLIO_VERSION', version: RELEASE });
+});
 
-  const url = new URL(req.url);
-
-  // Fontes: cache-first, cache próprio
-  if (url.origin === "https://fonts.googleapis.com" || url.origin === "https://fonts.gstatic.com") {
-    event.respondWith(
-      caches.open(FONTS).then(cache =>
-        cache.match(req).then(hit =>
-          hit || fetch(req).then(res => {
-            if (res.ok || res.type === "opaque") cache.put(req, res.clone());
-            return res;
-          }).catch(() => hit)
-        )
-      )
-    );
-    return;
-  }
-
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
-
-  // Navegação: rede primeiro, shell como reserva
-  if (req.mode === "navigate") {
-    event.respondWith(
-      fetch(req)
-        .then(res => {
-          const copy = res.clone();
-          caches.open(SHELL).then(c => c.put("./index.html", copy));
-          return res;
-        })
-        .catch(() => caches.match("./index.html", { ignoreSearch: true }))
-    );
-    return;
-  }
-
-  // Demais recursos locais: cache-first com revalidação
-  event.respondWith(
-    caches.match(req).then(hit => {
-      const net = fetch(req).then(res => {
-        if (res.ok) caches.open(SHELL).then(c => c.put(req, res.clone()));
-        return res;
-      }).catch(() => hit);
-      return hit || net;
-    })
-  );
+  const indexRequest = request.mode === 'navigate' &&
+    (url.pathname === new URL(SCOPE).pathname || url.pathname === new URL(INDEX_URL).pathname);
+  const cachedURL = indexRequest ? INDEX_URL : SHELL_PATHS.get(url.pathname);
+  // FolioStore owns book downloads. No API, external or user-document cache.
+  if (!cachedURL) return;
+  event.respondWith((async () => {
+    const cache = await caches.open(SHELL_CACHE);
+    const cached = await cache.match(cachedURL);
+    if (cached) return cached;
+    try { return await fetch(request); }
+    catch {
+      return new Response(indexRequest
+        ? 'O Folio ainda não terminou de preparar o modo offline. Conecte-se e abra o aplicativo novamente.'
+        : 'Recurso indisponível offline.', {
+        status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }
+      });
+    }
+  })());
 });
